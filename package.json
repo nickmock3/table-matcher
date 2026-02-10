@@ -16,6 +16,7 @@
     "db:migrate:prod": "wrangler d1 migrations apply table-matcher-prod --env prod --config wrangler.jsonc",
     "db:migrate:local": "wrangler d1 migrations apply table-matcher-dev --local --env dev --config wrangler.jsonc",
     "deploy:dev": "bun run build:cf && wrangler deploy --env dev --config wrangler.jsonc",
+    "deploy:demo": "bun run build:cf && wrangler deploy --env demo --config wrangler.jsonc",
     "deploy:prod": "bun run build:cf && wrangler deploy --env prod --config wrangler.jsonc"
   },
   "dependencies": {

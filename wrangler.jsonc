@@ -84,6 +84,45 @@
         }
       ]
     },
+    "demo": {
+      "name": "table-matcher-demo",
+      "images": {
+        "binding": "IMAGES"
+      },
+      "vars": {
+        "APP_NAME": "table-matcher",
+        "APP_TIMEZONE": "Asia/Tokyo",
+        "APP_ENV": "dev",
+        "APP_BASE_URL_DEV": "https://table-matcher-demo.<your-subdomain>.workers.dev",
+        "APP_BASE_URL_PROD": "https://example.com",
+        "GOOGLE_REDIRECT_URI_DEV": "https://table-matcher-demo.<your-subdomain>.workers.dev/api/auth/callback/google",
+        "GOOGLE_REDIRECT_URI_PROD": "https://example.com/api/auth/callback/google"
+      },
+      "d1_databases": [
+        {
+          "binding": "DB",
+          "database_name": "table-matcher-dev",
+          "database_id": "00000000-0000-0000-0000-000000000000",
+          "migrations_dir": "drizzle"
+        }
+      ],
+      "r2_buckets": [
+        {
+          "binding": "BUCKET_IMAGES",
+          "bucket_name": "table-matcher-images-dev"
+        },
+        {
+          "binding": "NEXT_INC_CACHE_R2_BUCKET",
+          "bucket_name": "table-matcher-cache-dev"
+        }
+      ],
+      "services": [
+        {
+          "binding": "WORKER_SELF_REFERENCE",
+          "service": "table-matcher-demo"
+        }
+      ]
+    },
     "prod": {
       "name": "table-matcher-prod",
       "images": {
