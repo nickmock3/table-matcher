@@ -1,0 +1,51 @@
+{
+  "name": "table-matcher",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "dev:cf": "bun run build:cf && opennextjs-cloudflare preview",
+    "build": "next build",
+    "build:cf": "rm -rf .open-next && opennextjs-cloudflare build",
+    "start": "next start",
+    "lint": "eslint",
+    "cf:typegen": "wrangler types --env-interface CloudflareEnv cloudflare-env.d.ts",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "bun run db:migrate:dev",
+    "db:migrate:dev": "wrangler d1 migrations apply table-matcher-dev --env dev --config wrangler.jsonc",
+    "db:migrate:prod": "wrangler d1 migrations apply table-matcher-prod --env prod --config wrangler.jsonc",
+    "db:migrate:local": "wrangler d1 migrations apply table-matcher-dev --local --env dev --config wrangler.jsonc",
+    "deploy:dev": "bun run build:cf && wrangler deploy --env dev --config wrangler.jsonc",
+    "deploy:prod": "bun run build:cf && wrangler deploy --env prod --config wrangler.jsonc"
+  },
+  "dependencies": {
+    "@opennextjs/cloudflare": "^1.16.3",
+    "better-auth": "^1.4.18",
+    "dotenv": "^17.2.4",
+    "drizzle-orm": "^0.45.1",
+    "next": "16.1.6",
+    "react": "19.2.3",
+    "react-dom": "19.2.3",
+    "zod": "^4.3.6"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "drizzle-kit": "^0.31.9",
+    "eslint": "^9",
+    "eslint-config-next": "16.1.6",
+    "tailwindcss": "^4",
+    "typescript": "^5",
+    "wrangler": "^4.63.0"
+  },
+  "ignoreScripts": [
+    "sharp",
+    "unrs-resolver"
+  ],
+  "trustedDependencies": [
+    "sharp",
+    "unrs-resolver"
+  ]
+}
