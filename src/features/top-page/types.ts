@@ -20,3 +20,8 @@ export type SearchFilters = {
   genre: string | null; // ジャンル（null=全件）
   vacancyOnly: boolean; // 空席のみ（初期値: true）
 };
+
+export type FilterOptions = {
+  cities: string[];
+  genres: string[];
+};

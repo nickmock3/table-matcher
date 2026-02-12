@@ -1,14 +1,14 @@
 'use client';
 
 import type { SearchFilters } from '../types';
-import { genres } from '../mockData';
 
 type GenreFilterProps = {
+  genres: string[];
   filters: SearchFilters;
   onFiltersChange: (filters: SearchFilters) => void;
 };
 
-export function GenreFilter({ filters, onFiltersChange }: GenreFilterProps) {
+export function GenreFilter({ genres, filters, onFiltersChange }: GenreFilterProps) {
   const handleGenreClick = (genre: string | null) => {
     onFiltersChange({
       ...filters,

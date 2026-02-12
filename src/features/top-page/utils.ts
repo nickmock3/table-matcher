@@ -1,4 +1,26 @@
-import type { Store, SearchFilters } from './types';
+import type { FilterOptions, SearchFilters, Store } from './types';
+
+export const defaultSearchFilters: SearchFilters = {
+  city: null,
+  genre: null,
+  vacancyOnly: true,
+};
+
+/**
+ * UIから来た検索条件を正規化する
+ * - 未知の city/genre は null 扱い
+ * - 空文字は null 扱い
+ */
+export function normalizeFilters(filters: SearchFilters, options: FilterOptions): SearchFilters {
+  const city = filters.city && options.cities.includes(filters.city) ? filters.city : null;
+  const genre = filters.genre && options.genres.includes(filters.genre) ? filters.genre : null;
+
+  return {
+    city,
+    genre,
+    vacancyOnly: Boolean(filters.vacancyOnly),
+  };
+}
 
 /**
  * 検索条件に基づいて店舗をフィルタリング
@@ -40,6 +62,11 @@ export function sortStores(stores: Store[]): Store[] {
     }
 
     // 2. 同グループ内は更新日時降順
-    return new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime();
+    const bTime = Date.parse(b.updatedAt);
+    const aTime = Date.parse(a.updatedAt);
+    const normalizedBTime = Number.isNaN(bTime) ? 0 : bTime;
+    const normalizedATime = Number.isNaN(aTime) ? 0 : aTime;
+
+    return normalizedBTime - normalizedATime;
   });
 }

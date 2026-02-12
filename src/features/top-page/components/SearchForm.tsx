@@ -1,14 +1,14 @@
 'use client';
 
 import type { SearchFilters } from '../types';
-import { cities } from '../mockData';
 
 type SearchFormProps = {
+  cities: string[];
   filters: SearchFilters;
   onFiltersChange: (filters: SearchFilters) => void;
 };
 
-export function SearchForm({ filters, onFiltersChange }: SearchFormProps) {
+export function SearchForm({ cities, filters, onFiltersChange }: SearchFormProps) {
   const handleCityChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const value = event.target.value;
     onFiltersChange({

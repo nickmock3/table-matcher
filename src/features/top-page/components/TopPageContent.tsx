@@ -2,33 +2,28 @@
 
 import { useState } from 'react';
 import type { SearchFilters } from '../types';
-import { mockStores } from '../mockData';
-import { filterStores, sortStores } from '../utils';
+import { mockStoreRepository } from '../data/storeRepository';
+import { defaultSearchFilters, filterStores, normalizeFilters, sortStores } from '../utils';
 import { SearchForm } from './SearchForm';
 import { GenreFilter } from './GenreFilter';
 import { StoreList } from './StoreList';
 
 export function TopPageContent() {
-  const [filters, setFilters] = useState<SearchFilters>({
-    city: null,
-    genre: null,
-    vacancyOnly: true,
-  });
+  const stores = mockStoreRepository.listStores();
+  const filterOptions = mockStoreRepository.listFilterOptions();
+  const [filters, setFilters] = useState<SearchFilters>(defaultSearchFilters);
 
-  const filteredStores = sortStores(filterStores(mockStores, filters));
+  const normalizedFilters = normalizeFilters(filters, filterOptions);
+  const filteredStores = sortStores(filterStores(stores, normalizedFilters));
 
   const handleReset = () => {
-    setFilters({
-      city: null,
-      genre: null,
-      vacancyOnly: true,
-    });
+    setFilters(defaultSearchFilters);
   };
 
   return (
     <>
-      <SearchForm filters={filters} onFiltersChange={setFilters} />
-      <GenreFilter filters={filters} onFiltersChange={setFilters} />
+      <SearchForm cities={filterOptions.cities} filters={filters} onFiltersChange={setFilters} />
+      <GenreFilter genres={filterOptions.genres} filters={filters} onFiltersChange={setFilters} />
       <StoreList stores={filteredStores} onReset={handleReset} />
     </>
   );
