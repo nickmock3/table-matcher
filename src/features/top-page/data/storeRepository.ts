@@ -4,6 +4,7 @@ import type { FilterOptions, Store } from '../types';
 export type StoreRepository = {
   listStores: () => Store[];
   listFilterOptions: () => FilterOptions;
+  findStoreById: (storeId: string) => Store | null;
 };
 
 function uniqueSorted(values: string[]): string[] {
@@ -18,4 +19,5 @@ const filterOptions: FilterOptions = {
 export const mockStoreRepository: StoreRepository = {
   listStores: () => mockStores,
   listFilterOptions: () => filterOptions,
+  findStoreById: (storeId: string) => mockStores.find((store) => store.id === storeId) ?? null,
 };
