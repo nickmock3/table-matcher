@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import type { Store } from '@/features/top-page/types';
+import { createStoreMapViewModel } from '@/features/store-detail/store-detail';
 import { StoreImageCarousel } from './StoreImageCarousel';
 
 type StoreDetailPageContentProps = {
@@ -21,6 +22,8 @@ function VacancyBadge({ vacancyStatus }: { vacancyStatus: Store['vacancyStatus']
 }
 
 export function StoreDetailPageContent({ store }: StoreDetailPageContentProps) {
+  const mapView = createStoreMapViewModel(store);
+
   return (
     <main className="mx-auto min-h-screen w-full max-w-3xl px-6 pb-40 pt-10 text-text">
       <Link className="text-sm underline decoration-main hover:text-main-strong" href="/">
@@ -69,9 +72,21 @@ export function StoreDetailPageContent({ store }: StoreDetailPageContentProps) {
 
       <section className="mt-6 rounded-xl border border-border bg-surface p-4">
         <h2 className="text-sm font-semibold text-text/80">地図</h2>
-        <div className="mt-3 flex h-44 items-center justify-center rounded-lg bg-base text-sm text-text/60">
-          地図表示領域（準備中）
-        </div>
+        {mapView.type === 'embed' ? (
+          <div className="mt-3 overflow-hidden rounded-lg border border-border">
+            <iframe
+              title={mapView.label}
+              src={mapView.src}
+              className="h-56 w-full bg-base"
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+            />
+          </div>
+        ) : (
+          <div className="mt-3 flex h-44 items-center justify-center rounded-lg bg-base text-sm text-text/60">
+            {mapView.message}
+          </div>
+        )}
       </section>
 
       <div className="fixed inset-x-0 bottom-0 z-40 border-t-2 border-emerald-700 bg-emerald-100/95 px-4 py-3 pb-[calc(0.75rem+env(safe-area-inset-bottom))] backdrop-blur-sm">
