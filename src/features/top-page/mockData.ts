@@ -27,11 +27,14 @@ export const mockStores: Store[] = [
   {
     id: '3',
     name: '和食処 さくら',
+    address: '東京都新宿区西新宿2-8-1',
     city: '新宿区',
     genre: '和食',
     reservationUrl: 'https://example.com/reserve/3',
     vacancyStatus: 'available',
     updatedAt: '2026-02-12T11:00:00Z',
+    latitude: 35.6896,
+    longitude: 139.6917,
     imageUrls: [
       'https://images.unsplash.com/photo-1579584425555-c3ce17fd4351?w=1200&h=675&fit=crop',
       'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=1200&h=675&fit=crop',

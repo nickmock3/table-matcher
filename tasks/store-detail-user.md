@@ -42,6 +42,16 @@
 - DoD:
   - 仕様書の機能要件 1,2,6 を満たす
   - 関連unitテストが通過
+- ステータス:
+  - 完了（2026-02-13）
+- 実行コマンド:
+  - `bun run lint`
+  - `bun run test`
+  - `bun run build`
+- 結果要約:
+  - lint: pass
+  - unit: pass（`src/features/store-detail/store-detail.test.ts` を含む）
+  - build: pass
 
 ### TASK-SD-003: 主要導線E2Eと仕上げ
 - 内容:
@@ -65,3 +75,4 @@
 - 2026-02-13: 初版作成
 - 2026-02-13: バナー広告領域（仮置き）タスクを追加
 - 2026-02-13: TASK-SD-001 の完了判定（実行コマンド・結果）を追記
+- 2026-02-13: TASK-SD-002 の完了判定（実行コマンド・結果）を追記

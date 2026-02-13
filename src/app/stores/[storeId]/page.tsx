@@ -1,5 +1,6 @@
 import { notFound } from 'next/navigation';
 import { StoreDetailPageContent } from '@/features/store-detail/components/StoreDetailPageContent';
+import { resolveStoreById } from '@/features/store-detail/store-detail';
 import { mockStoreRepository } from '@/features/top-page/data/storeRepository';
 
 type StoreDetailPageProps = {
@@ -10,7 +11,8 @@ type StoreDetailPageProps = {
 
 export default async function StoreDetailPage({ params }: StoreDetailPageProps) {
   const { storeId } = await params;
-  const store = mockStoreRepository.findStoreById(storeId);
+  const stores = mockStoreRepository.listStores();
+  const store = resolveStoreById(stores, storeId);
 
   if (!store) {
     notFound();

@@ -4,12 +4,15 @@
 export type Store = {
   id: string;
   name: string;
+  address?: string;
   city: string;
   genre: string;
   reservationUrl: string;
   vacancyStatus: 'available' | 'unavailable';
   updatedAt: string; // ISO 8601
   imageUrls?: string[]; // 店舗画像URL一覧（1〜10想定）
+  latitude?: number;
+  longitude?: number;
 };
 
 /**
