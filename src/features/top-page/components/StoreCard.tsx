@@ -8,6 +8,7 @@ type StoreCardProps = {
 
 export function StoreCard({ store }: StoreCardProps) {
   const isAvailable = store.vacancyStatus === 'available';
+  const thumbnailUrl = store.imageUrls?.[0];
   const updatedDate = new Date(store.updatedAt);
   const formattedTime = updatedDate.toLocaleString('ja-JP', {
     month: 'numeric',
@@ -23,9 +24,9 @@ export function StoreCard({ store }: StoreCardProps) {
     >
       {/* 画像 */}
       <div className="relative aspect-[4/3] w-full bg-text/5">
-        {store.imageUrl ? (
+        {thumbnailUrl ? (
           <Image
-            src={store.imageUrl}
+            src={thumbnailUrl}
             alt={store.name}
             fill
             className="object-cover"
