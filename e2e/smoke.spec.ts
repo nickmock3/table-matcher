@@ -18,4 +18,19 @@ test("トップ画面から条件指定して店舗詳細へ遷移できる", as
 
   await expect(page).toHaveURL(/\/stores\/3$/);
   await expect(page.getByRole("heading", { name: "和食処 さくら" })).toBeVisible();
+  await expect(page.getByText("バナー広告領域（仮置き）")).toBeVisible();
+
+  const reservationLink = page.getByRole("link", { name: "外部予約サイトへ進む" });
+  await expect(reservationLink).toBeVisible();
+  await expect(reservationLink).toHaveAttribute("target", "_blank");
+  await expect(reservationLink).toHaveAttribute("href", "https://example.com/reserve/3");
+
+  await page.getByRole("link", { name: "一覧へ戻る" }).click();
+  await expect(page).toHaveURL("/");
+  await expect(page.getByRole("heading", { name: "今空いている店を見つけよう" })).toBeVisible();
+});
+
+test("存在しないstoreIdでは404となる", async ({ page }) => {
+  await page.goto("/stores/999");
+  await expect(page.getByRole("heading", { name: "404" })).toBeVisible();
 });
