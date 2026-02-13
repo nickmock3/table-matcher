@@ -42,6 +42,12 @@ export default async function StoreDetailPage({ params }: StoreDetailPageProps) 
           </div>
         </dl>
       </section>
+      <section className="mt-6 rounded-xl border border-dashed border-main/40 bg-surface p-4">
+        <h2 className="text-sm font-semibold text-text/80">広告</h2>
+        <div className="mt-3 flex h-24 items-center justify-center rounded-lg bg-base text-sm text-text/60">
+          バナー広告領域（仮置き）
+        </div>
+      </section>
     </main>
   );
 }
