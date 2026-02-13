@@ -9,7 +9,7 @@ export type Store = {
   reservationUrl: string;
   vacancyStatus: 'available' | 'unavailable';
   updatedAt: string; // ISO 8601
-  imageUrl?: string; // 店舗画像URL（オプショナル）
+  imageUrls?: string[]; // 店舗画像URL一覧（1〜10想定）
 };
 
 /**

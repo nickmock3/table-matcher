@@ -56,7 +56,7 @@
 ## データ要件
 - 主なエンティティ: Store, VacancyStatus
 - 保存項目:
-  - Store: `id`, `name`, `genre`, `city`, `reservationUrl`, `imageUrl`
+  - Store: `id`, `name`, `genre`, `city`, `reservationUrl`, `imageUrls`（1〜10枚）
   - VacancyStatus: `vacancyStatus`, `updatedAt`
   - Map: `latitude`, `longitude`（MVPで未保有なら住所ベース表示を許容）
 - バリデーション制約:

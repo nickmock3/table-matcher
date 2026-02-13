@@ -12,7 +12,7 @@ export const mockStores: Store[] = [
     reservationUrl: 'https://example.com/reserve/1',
     vacancyStatus: 'available',
     updatedAt: '2026-02-12T10:30:00Z',
-    imageUrl: 'https://images.unsplash.com/photo-1554118811-1e0d58224f24?w=400&h=300&fit=crop',
+    imageUrls: ['https://images.unsplash.com/photo-1554118811-1e0d58224f24?w=400&h=300&fit=crop'],
   },
   {
     id: '2',
@@ -22,7 +22,7 @@ export const mockStores: Store[] = [
     reservationUrl: 'https://example.com/reserve/2',
     vacancyStatus: 'available',
     updatedAt: '2026-02-12T09:15:00Z',
-    imageUrl: 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=400&h=300&fit=crop',
+    imageUrls: ['https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=400&h=300&fit=crop'],
   },
   {
     id: '3',
@@ -32,7 +32,11 @@ export const mockStores: Store[] = [
     reservationUrl: 'https://example.com/reserve/3',
     vacancyStatus: 'available',
     updatedAt: '2026-02-12T11:00:00Z',
-    imageUrl: 'https://images.unsplash.com/photo-1579584425555-c3ce17fd4351?w=400&h=300&fit=crop',
+    imageUrls: [
+      'https://images.unsplash.com/photo-1579584425555-c3ce17fd4351?w=1200&h=675&fit=crop',
+      'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=1200&h=675&fit=crop',
+      'https://images.unsplash.com/photo-1515003197210-e0cd71810b5f?w=1200&h=675&fit=crop',
+    ],
   },
   {
     id: '4',
@@ -42,7 +46,7 @@ export const mockStores: Store[] = [
     reservationUrl: 'https://example.com/reserve/4',
     vacancyStatus: 'unavailable',
     updatedAt: '2026-02-12T10:45:00Z',
-    imageUrl: 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=400&h=300&fit=crop',
+    imageUrls: ['https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=400&h=300&fit=crop'],
   },
   {
     id: '5',
@@ -52,7 +56,7 @@ export const mockStores: Store[] = [
     reservationUrl: 'https://example.com/reserve/5',
     vacancyStatus: 'available',
     updatedAt: '2026-02-12T08:20:00Z',
-    imageUrl: 'https://images.unsplash.com/photo-1525755662778-989d0524087e?w=400&h=300&fit=crop',
+    imageUrls: ['https://images.unsplash.com/photo-1525755662778-989d0524087e?w=400&h=300&fit=crop'],
   },
   {
     id: '6',
@@ -62,7 +66,7 @@ export const mockStores: Store[] = [
     reservationUrl: 'https://example.com/reserve/6',
     vacancyStatus: 'unavailable',
     updatedAt: '2026-02-12T09:30:00Z',
-    imageUrl: 'https://images.unsplash.com/photo-1515003197210-e0cd71810b5f?w=400&h=300&fit=crop',
+    imageUrls: ['https://images.unsplash.com/photo-1515003197210-e0cd71810b5f?w=400&h=300&fit=crop'],
   },
   {
     id: '7',
@@ -72,7 +76,7 @@ export const mockStores: Store[] = [
     reservationUrl: 'https://example.com/reserve/7',
     vacancyStatus: 'available',
     updatedAt: '2026-02-12T10:00:00Z',
-    imageUrl: 'https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?w=400&h=300&fit=crop',
+    imageUrls: ['https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?w=400&h=300&fit=crop'],
   },
   {
     id: '8',
@@ -82,7 +86,7 @@ export const mockStores: Store[] = [
     reservationUrl: 'https://example.com/reserve/8',
     vacancyStatus: 'unavailable',
     updatedAt: '2026-02-12T11:15:00Z',
-    imageUrl: 'https://images.unsplash.com/photo-1588347818036-8fc5083eecd0?w=400&h=300&fit=crop',
+    imageUrls: ['https://images.unsplash.com/photo-1588347818036-8fc5083eecd0?w=400&h=300&fit=crop'],
   },
   {
     id: '9',
@@ -92,7 +96,7 @@ export const mockStores: Store[] = [
     reservationUrl: 'https://example.com/reserve/9',
     vacancyStatus: 'available',
     updatedAt: '2026-02-12T09:45:00Z',
-    imageUrl: 'https://images.unsplash.com/photo-1559314809-0d155014e29e?w=400&h=300&fit=crop',
+    imageUrls: ['https://images.unsplash.com/photo-1559314809-0d155014e29e?w=400&h=300&fit=crop'],
   },
   {
     id: '10',
@@ -102,7 +106,7 @@ export const mockStores: Store[] = [
     reservationUrl: 'https://example.com/reserve/10',
     vacancyStatus: 'unavailable',
     updatedAt: '2026-02-12T08:50:00Z',
-    imageUrl: 'https://images.unsplash.com/photo-1498654896293-37aacf113fd9?w=400&h=300&fit=crop',
+    imageUrls: ['https://images.unsplash.com/photo-1498654896293-37aacf113fd9?w=400&h=300&fit=crop'],
   },
   {
     id: '11',
@@ -112,7 +116,7 @@ export const mockStores: Store[] = [
     reservationUrl: 'https://example.com/reserve/11',
     vacancyStatus: 'available',
     updatedAt: '2026-02-12T10:10:00Z',
-    imageUrl: 'https://images.unsplash.com/photo-1579584425555-c3ce17fd4351?w=400&h=300&fit=crop',
+    imageUrls: ['https://images.unsplash.com/photo-1579584425555-c3ce17fd4351?w=400&h=300&fit=crop'],
   },
   {
     id: '12',
@@ -122,7 +126,7 @@ export const mockStores: Store[] = [
     reservationUrl: 'https://example.com/reserve/12',
     vacancyStatus: 'unavailable',
     updatedAt: '2026-02-12T09:00:00Z',
-    imageUrl: 'https://images.unsplash.com/photo-1511920170033-f8396924c348?w=400&h=300&fit=crop',
+    imageUrls: ['https://images.unsplash.com/photo-1511920170033-f8396924c348?w=400&h=300&fit=crop'],
   },
   {
     id: '13',
@@ -132,7 +136,7 @@ export const mockStores: Store[] = [
     reservationUrl: 'https://example.com/reserve/13',
     vacancyStatus: 'available',
     updatedAt: '2026-02-12T10:20:00Z',
-    imageUrl: 'https://images.unsplash.com/photo-1585937421612-70a008356fbe?w=400&h=300&fit=crop',
+    imageUrls: ['https://images.unsplash.com/photo-1585937421612-70a008356fbe?w=400&h=300&fit=crop'],
   },
   {
     id: '14',
@@ -142,7 +146,7 @@ export const mockStores: Store[] = [
     reservationUrl: 'https://example.com/reserve/14',
     vacancyStatus: 'unavailable',
     updatedAt: '2026-02-12T11:30:00Z',
-    imageUrl: 'https://images.unsplash.com/photo-1569718212165-3a8278d5f624?w=400&h=300&fit=crop',
+    imageUrls: ['https://images.unsplash.com/photo-1569718212165-3a8278d5f624?w=400&h=300&fit=crop'],
   },
   {
     id: '15',
@@ -152,7 +156,7 @@ export const mockStores: Store[] = [
     reservationUrl: 'https://example.com/reserve/15',
     vacancyStatus: 'available',
     updatedAt: '2026-02-12T09:50:00Z',
-    imageUrl: 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=400&h=300&fit=crop',
+    imageUrls: ['https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=400&h=300&fit=crop'],
   },
 ];
 
