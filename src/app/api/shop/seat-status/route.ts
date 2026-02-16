@@ -4,17 +4,17 @@ import { z } from 'zod';
 import {
   seatStatusSchema,
   updateSeatStatusForStoreUser,
-  type SeatStatus,
   type SeatStatusUpdateRepository,
 } from '@/features/store-vacancy-update/update-seat-status';
+import { resolveCurrentSeatStatus } from '@/features/store-vacancy-update/seat-status-view';
 import { createAuth } from '@/lib/auth/server';
 import { getDrizzleDb } from '@/lib/db/client';
-import { seatStatusUpdates, storeUserLinks } from '@/lib/db/schema';
-import { mockStoreRepository } from '@/features/top-page/data/storeRepository';
+import { seatStatusUpdates, storeUserLinks, stores } from '@/lib/db/schema';
 
 type StoreLink = {
   storeId: string;
   userId: string;
+  storeName: string;
 };
 
 const postRequestSchema = z.object({
@@ -62,8 +62,10 @@ const resolveStoreLink = async (loginEmail: string): Promise<
     .select({
       storeId: storeUserLinks.storeId,
       userId: storeUserLinks.userId,
+      storeName: stores.name,
     })
     .from(storeUserLinks)
+    .innerJoin(stores, eq(storeUserLinks.storeId, stores.id))
     .where(eq(storeUserLinks.loginEmail, loginEmail));
 
   if (links.length === 0) {
@@ -118,38 +120,6 @@ const getSessionEmail = async (
   };
 };
 
-const resolveCurrentStatus = (latest: { status: SeatStatus; expiresAt: number } | null, nowEpoch: number) => {
-  if (!latest) {
-    return {
-      currentStatus: 'unknown' as const,
-      expiresAt: null,
-      canMarkAvailable: true,
-    };
-  }
-
-  if (latest.expiresAt <= nowEpoch) {
-    return {
-      currentStatus: 'unknown' as const,
-      expiresAt: null,
-      canMarkAvailable: true,
-    };
-  }
-
-  if (latest.status === 'available') {
-    return {
-      currentStatus: 'available' as const,
-      expiresAt: latest.expiresAt,
-      canMarkAvailable: false,
-    };
-  }
-
-  return {
-    currentStatus: 'unavailable' as const,
-    expiresAt: latest.expiresAt,
-    canMarkAvailable: true,
-  };
-};
-
 export async function GET(request: Request) {
   try {
     const sessionResult = await getSessionEmail(request);
@@ -170,20 +140,19 @@ export async function GET(request: Request) {
       })
       .from(seatStatusUpdates)
       .where(eq(seatStatusUpdates.storeId, linkResult.link.storeId))
-      .orderBy(desc(seatStatusUpdates.createdAt))
+      .orderBy(desc(seatStatusUpdates.createdAt), desc(seatStatusUpdates.id))
       .limit(1);
 
     const latest = rows[0] ?? null;
     const nowEpoch = Math.floor(Date.now() / 1000);
-    const current = resolveCurrentStatus(latest, nowEpoch);
-    const store = mockStoreRepository.findStoreById(linkResult.link.storeId);
+    const current = resolveCurrentSeatStatus(latest, nowEpoch);
 
     return Response.json(
       {
         ok: true,
         storeId: linkResult.link.storeId,
-        storeName: store?.name ?? null,
-        coverImageUrl: store?.imageUrls?.[0] ?? null,
+        storeName: linkResult.link.storeName,
+        coverImageUrl: null,
         currentStatus: current.currentStatus,
         expiresAt: current.expiresAt,
         canMarkAvailable: current.canMarkAvailable,

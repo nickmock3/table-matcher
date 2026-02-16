@@ -2,17 +2,13 @@
 
 import Link from 'next/link';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-
-type CurrentStatus = 'available' | 'unavailable' | 'unknown';
-
-type SeatStatusState = {
-  storeId: string;
-  storeName: string | null;
-  coverImageUrl: string | null;
-  currentStatus: CurrentStatus;
-  expiresAt: number | null;
-  canMarkAvailable: boolean;
-};
+import { mockStoreRepository } from '@/features/top-page/data/storeRepository';
+import {
+  isMarkAvailableActionDisabled,
+  parseSeatStatusState,
+  type CurrentStatus,
+  type SeatStatusState,
+} from '@/features/store-vacancy-update/seat-status-view';
 
 function formatStatusLabel(status: CurrentStatus): string {
   if (status === 'available') return '空席あり';
@@ -32,53 +28,6 @@ function parseErrorMessage(payload: unknown, fallbackMessage: string): string {
 
   const message = (payload as { message?: unknown }).message;
   return typeof message === 'string' && message.length > 0 ? message : fallbackMessage;
-}
-
-function parseState(payload: unknown): SeatStatusState | null {
-  if (typeof payload !== 'object' || payload === null) {
-    return null;
-  }
-
-  const data = payload as {
-    ok?: unknown;
-    storeId?: unknown;
-    storeName?: unknown;
-    coverImageUrl?: unknown;
-    currentStatus?: unknown;
-    expiresAt?: unknown;
-    canMarkAvailable?: unknown;
-  };
-
-  if (data.ok !== true) return null;
-  if (typeof data.storeId !== 'string') return null;
-  if (
-    data.currentStatus !== 'available' &&
-    data.currentStatus !== 'unavailable' &&
-    data.currentStatus !== 'unknown'
-  ) {
-    return null;
-  }
-  if (data.expiresAt !== null && typeof data.expiresAt !== 'number') return null;
-  if (typeof data.canMarkAvailable !== 'boolean') return null;
-  if (data.storeName !== null && data.storeName !== undefined && typeof data.storeName !== 'string') {
-    return null;
-  }
-  if (
-    data.coverImageUrl !== null &&
-    data.coverImageUrl !== undefined &&
-    typeof data.coverImageUrl !== 'string'
-  ) {
-    return null;
-  }
-
-  return {
-    storeId: data.storeId,
-    storeName: data.storeName ?? null,
-    coverImageUrl: data.coverImageUrl ?? null,
-    currentStatus: data.currentStatus,
-    expiresAt: data.expiresAt,
-    canMarkAvailable: data.canMarkAvailable,
-  };
 }
 
 export function SeatStatusUpdatePageContent() {
@@ -101,7 +50,7 @@ export function SeatStatusUpdatePageContent() {
         return;
       }
 
-      const parsed = parseState(payload);
+      const parsed = parseSeatStatusState(payload);
       if (!parsed) {
         setState(null);
         setErrorMessage('状態データの解析に失敗しました。再読み込みしてください。');
@@ -163,7 +112,15 @@ export function SeatStatusUpdatePageContent() {
     return formatExpiresAt(state.expiresAt);
   }, [state]);
 
-  const actionDisabled = isLoading || isSubmitting || !state?.canMarkAvailable;
+  const fallbackStore = useMemo(() => {
+    if (!state) return null;
+    return mockStoreRepository.findStoreById(state.storeId);
+  }, [state]);
+
+  const displayStoreName = state?.storeName ?? fallbackStore?.name ?? '-';
+  const displayCoverImageUrl = state?.coverImageUrl ?? fallbackStore?.imageUrls?.[0] ?? null;
+
+  const actionDisabled = isMarkAvailableActionDisabled({ isLoading, isSubmitting, state });
 
   return (
     <main className="mx-auto min-h-screen w-full max-w-3xl px-6 py-10 text-text">
@@ -179,12 +136,12 @@ export function SeatStatusUpdatePageContent() {
           <section className="mt-6 rounded-lg border border-border bg-base p-4">
             <h2 className="text-sm font-semibold text-text/80">現在の空席情報</h2>
             <div className="mt-3 overflow-hidden rounded-md border border-border bg-surface">
-              {state?.coverImageUrl ? (
+              {displayCoverImageUrl ? (
                 // Temporarily using img for flexible external placeholder URLs in MVP.
                 // eslint-disable-next-line @next/next/no-img-element
                 <img
-                  src={state.coverImageUrl}
-                  alt={`${state.storeName ?? state.storeId} の店舗画像`}
+                  src={displayCoverImageUrl}
+                  alt={`${displayStoreName} の店舗画像`}
                   className="h-44 w-full object-cover"
                 />
               ) : (
@@ -196,7 +153,7 @@ export function SeatStatusUpdatePageContent() {
             <dl className="mt-2 grid gap-2 text-sm">
               <div>
                 <dt className="text-text/60">店舗名</dt>
-                <dd>{state?.storeName ?? '-'}</dd>
+                <dd>{displayStoreName}</dd>
               </div>
               <div>
                 <dt className="text-text/60">店舗ID</dt>
