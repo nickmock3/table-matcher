@@ -9,6 +9,9 @@ test("ホーム画面が表示される", async ({ page }) => {
 test("トップ画面から条件指定して店舗詳細へ遷移できる", async ({ page }) => {
   await page.goto("/");
 
+  await page.getByRole("button", { name: "空席のみ: ON" }).click();
+  await expect(page.getByRole("button", { name: "空席のみ: OFF" })).toBeVisible();
+
   await page.selectOption("#city", "新宿区");
   await page.getByRole("button", { name: "和食" }).click();
 
