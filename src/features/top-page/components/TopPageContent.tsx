@@ -2,14 +2,19 @@
 
 import { useState } from 'react';
 import type { SearchFilters } from '../types';
+import type { Store } from '../types';
 import { mockStoreRepository } from '../data/storeRepository';
 import { defaultSearchFilters, filterStores, normalizeFilters, sortStores } from '../utils';
 import { SearchForm } from './SearchForm';
 import { GenreFilter } from './GenreFilter';
 import { StoreList } from './StoreList';
 
-export function TopPageContent() {
-  const stores = mockStoreRepository.listStores();
+type TopPageContentProps = {
+  stores?: Store[];
+};
+
+export function TopPageContent({ stores: initialStores }: TopPageContentProps) {
+  const stores = initialStores ?? mockStoreRepository.listStores();
   const filterOptions = mockStoreRepository.listFilterOptions();
   const [filters, setFilters] = useState<SearchFilters>(defaultSearchFilters);
 
