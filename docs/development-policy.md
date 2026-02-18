@@ -130,6 +130,8 @@
 - ブランチ命名は `feature/<feature-name>-<task-name>` とする。
 - `<feature-name>` と `<task-name>` はどちらも kebab-case とする。
 - prefix は必須とし、機能実装タスクでは `feature/` を使用する。
+- Gitの状態変更系コマンド（`checkout` / `switch` / `pull` / `merge` / `rebase`）は並列実行しない。
+- Git操作は原則として逐次実行し、前コマンドの完了を確認してから次を実行する。
 
 ### 6.5.1 命名例
 - `feature/auth-google-signin`
@@ -191,6 +193,7 @@
 - 2026-02-10: Definition of Doneを追加（タスク単位判定、証跡/レビュー/例外運用を確定）
 - 2026-02-10: レビュー基準を追加（1人開発 + AIレビュー必須運用を確定）
 - 2026-02-10: ブランチ運用ルールを追加（1タスク1ブランチ、`feature/` + kebab-case）
+- 2026-02-18: Git状態変更系コマンドの並列実行禁止を追記
 - 2026-02-10: 機能仕様書テンプレートを確定（`docs/specs/features/_template.md`）
 - 2026-02-10: リリース手順を確定（`dev / demo / prod` の3段階運用とロールバック）
 - 2026-02-10: `demo` 環境実装を反映（`env.demo` と `deploy:demo` を追加）
