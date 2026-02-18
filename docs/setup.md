@@ -141,3 +141,23 @@ bun run deploy:prod
 - `/api/health` が `ok: true`
 - `/api/auth/get-session` が応答
 - Google Sign In が成功
+
+## 11. Google実ログイン手動確認手順
+1. `.dev.vars` に `BETTER_AUTH_SECRET` / `GOOGLE_CLIENT_ID` / `GOOGLE_CLIENT_SECRET` / `APP_BASE_URL_*` / `GOOGLE_REDIRECT_URI_*` を設定する。
+2. Google Cloud Console で、実行する環境の Origin と Redirect URI を完全一致で登録する。
+3. ローカルD1を利用する場合は先に以下を実行する。
+```bash
+bun run db:migrate:local
+bun run db:seed:local
+```
+4. Cloudflare previewで起動する。
+```bash
+bun run dev:cf -- --port 8787
+```
+5. ブラウザで `http://127.0.0.1:8787/shop/login` を開き、`Googleでログイン` を実行する。
+6. ログイン成功後、セッション状態にメールアドレスが表示されることを確認する。
+7. `ログアウト` を実行し、`未ログインです。` 表示へ戻ることを確認する。
+
+補足:
+- `Auth is not available in this runtime` が出る場合は `bun run dev:cf` で起動しているか確認する。
+- `Invalid origin` / `redirect_uri_mismatch` が出る場合は GCP 側登録値と実行URLの不一致を確認する。
