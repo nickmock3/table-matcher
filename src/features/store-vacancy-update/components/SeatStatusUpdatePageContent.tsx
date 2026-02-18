@@ -181,9 +181,14 @@ export function SeatStatusUpdatePageContent() {
         ) : null}
 
         {errorMessage ? (
-          <p className="mt-4 rounded-md border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700">
-            {errorMessage}
-          </p>
+          <div className="mt-4 rounded-md border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700">
+            <p>{errorMessage}</p>
+            {errorMessage === 'Unauthorized' ? (
+              <Link className="mt-2 inline-flex text-sm underline" href="/shop/login">
+                ログイン画面へ
+              </Link>
+            ) : null}
+          </div>
         ) : null}
 
         <div className="mt-6">

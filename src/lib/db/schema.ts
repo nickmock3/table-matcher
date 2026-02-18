@@ -1,6 +1,7 @@
 import { integer, real, sqliteTable, text } from "drizzle-orm/sqlite-core";
 
 const nowEpoch = () => Math.floor(Date.now() / 1000);
+const nowDate = () => new Date();
 
 export const user = sqliteTable("user", {
   id: text("id").primaryKey(),
@@ -8,16 +9,16 @@ export const user = sqliteTable("user", {
   email: text("email").notNull().unique(),
   emailVerified: integer("email_verified", { mode: "boolean" }).notNull().default(false),
   image: text("image"),
-  createdAt: integer("created_at", { mode: "number" }).notNull().$defaultFn(nowEpoch),
-  updatedAt: integer("updated_at", { mode: "number" }).notNull().$defaultFn(nowEpoch),
+  createdAt: integer("created_at", { mode: "timestamp_ms" }).notNull().$defaultFn(nowDate),
+  updatedAt: integer("updated_at", { mode: "timestamp_ms" }).notNull().$defaultFn(nowDate),
 });
 
 export const session = sqliteTable("session", {
   id: text("id").primaryKey(),
-  expiresAt: integer("expires_at", { mode: "number" }).notNull(),
+  expiresAt: integer("expires_at", { mode: "timestamp_ms" }).notNull(),
   token: text("token").notNull().unique(),
-  createdAt: integer("created_at", { mode: "number" }).notNull().$defaultFn(nowEpoch),
-  updatedAt: integer("updated_at", { mode: "number" }).notNull().$defaultFn(nowEpoch),
+  createdAt: integer("created_at", { mode: "timestamp_ms" }).notNull().$defaultFn(nowDate),
+  updatedAt: integer("updated_at", { mode: "timestamp_ms" }).notNull().$defaultFn(nowDate),
   ipAddress: text("ip_address"),
   userAgent: text("user_agent"),
   userId: text("user_id")
@@ -35,21 +36,21 @@ export const account = sqliteTable("account", {
   accessToken: text("access_token"),
   refreshToken: text("refresh_token"),
   idToken: text("id_token"),
-  accessTokenExpiresAt: integer("access_token_expires_at", { mode: "number" }),
-  refreshTokenExpiresAt: integer("refresh_token_expires_at", { mode: "number" }),
+  accessTokenExpiresAt: integer("access_token_expires_at", { mode: "timestamp_ms" }),
+  refreshTokenExpiresAt: integer("refresh_token_expires_at", { mode: "timestamp_ms" }),
   scope: text("scope"),
   password: text("password"),
-  createdAt: integer("created_at", { mode: "number" }).notNull().$defaultFn(nowEpoch),
-  updatedAt: integer("updated_at", { mode: "number" }).notNull().$defaultFn(nowEpoch),
+  createdAt: integer("created_at", { mode: "timestamp_ms" }).notNull().$defaultFn(nowDate),
+  updatedAt: integer("updated_at", { mode: "timestamp_ms" }).notNull().$defaultFn(nowDate),
 });
 
 export const verification = sqliteTable("verification", {
   id: text("id").primaryKey(),
   identifier: text("identifier").notNull(),
   value: text("value").notNull(),
-  expiresAt: integer("expires_at", { mode: "number" }).notNull(),
-  createdAt: integer("created_at", { mode: "number" }).$defaultFn(nowEpoch),
-  updatedAt: integer("updated_at", { mode: "number" }).$defaultFn(nowEpoch),
+  expiresAt: integer("expires_at", { mode: "timestamp_ms" }).notNull(),
+  createdAt: integer("created_at", { mode: "timestamp_ms" }).$defaultFn(nowDate),
+  updatedAt: integer("updated_at", { mode: "timestamp_ms" }).$defaultFn(nowDate),
 });
 
 export const users = sqliteTable("users", {
