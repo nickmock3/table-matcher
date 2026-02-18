@@ -1,6 +1,11 @@
 import { describe, expect, it } from 'vitest';
 
-import { resolvePublicStoreById, resolvePublicStoresWithVacancy } from './public-store-resolver';
+import {
+  resolvePublicStoreById,
+  resolvePublicStoreByIdResult,
+  resolvePublicStoresWithVacancy,
+  resolvePublicStoresWithVacancyResult,
+} from './public-store-resolver';
 import type { Store } from '@/features/top-page/types';
 
 const baseStores: Store[] = [
@@ -88,5 +93,34 @@ describe('resolvePublicStoreById', () => {
     });
 
     expect(store).toBeNull();
+  });
+});
+
+describe('result helpers', () => {
+  it('ベース店舗取得失敗時はunavailableを返す', async () => {
+    const result = await resolvePublicStoresWithVacancyResult({
+      listBaseStores: async () => ({ ok: false }),
+    });
+
+    expect(result).toEqual({ ok: false });
+  });
+
+  it('storeId解決で未存在と取得失敗を区別できる', async () => {
+    const notFound = await resolvePublicStoreByIdResult('999', {
+      baseStores,
+      listSeatStatusUpdates: async () => [],
+    });
+    expect(notFound).toEqual({
+      ok: false,
+      reason: 'not_found',
+    });
+
+    const unavailable = await resolvePublicStoreByIdResult('1', {
+      listBaseStores: async () => ({ ok: false }),
+    });
+    expect(unavailable).toEqual({
+      ok: false,
+      reason: 'unavailable',
+    });
   });
 });

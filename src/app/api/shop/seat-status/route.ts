@@ -6,6 +6,7 @@ import {
   updateSeatStatusForStoreUser,
   type SeatStatusUpdateRepository,
 } from '@/features/store-vacancy-update/update-seat-status';
+import { parseStoreImageUrls } from '@/features/store-data/store-model';
 import { resolveCurrentSeatStatus } from '@/features/store-vacancy-update/seat-status-view';
 import { createAuth } from '@/lib/auth/server';
 import { getDrizzleDb } from '@/lib/db/client';
@@ -15,6 +16,7 @@ type StoreLink = {
   storeId: string;
   userId: string;
   storeName: string;
+  storeImageUrls: string | null;
 };
 
 const postRequestSchema = z.object({
@@ -63,6 +65,7 @@ const resolveStoreLink = async (loginEmail: string): Promise<
       storeId: storeUserLinks.storeId,
       userId: storeUserLinks.userId,
       storeName: stores.name,
+      storeImageUrls: stores.imageUrls,
     })
     .from(storeUserLinks)
     .innerJoin(stores, eq(storeUserLinks.storeId, stores.id))
@@ -152,7 +155,7 @@ export async function GET(request: Request) {
         ok: true,
         storeId: linkResult.link.storeId,
         storeName: linkResult.link.storeName,
-        coverImageUrl: null,
+        coverImageUrl: parseStoreImageUrls(linkResult.link.storeImageUrls)[0] ?? null,
         currentStatus: current.currentStatus,
         expiresAt: current.expiresAt,
         canMarkAvailable: current.canMarkAvailable,
