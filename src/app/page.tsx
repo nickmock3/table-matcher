@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { Hero } from '@/features/top-page/components/Hero';
 import { TopPageContent } from '@/features/top-page/components/TopPageContent';
 import { resolvePublicStoresWithVacancyResult } from '@/features/public-vacancy-reflection/public-store-resolver';
@@ -19,6 +20,14 @@ export default async function Home({ searchParams }: HomePageProps) {
 
   return (
     <main className="min-h-screen bg-base">
+      <div className="mx-auto flex w-full max-w-3xl justify-end px-6 pt-5">
+        <Link
+          href="/shop/login"
+          className="rounded-md border border-border bg-surface px-3 py-1.5 text-xs font-semibold text-text hover:text-main-strong"
+        >
+          店舗ユーザー / 管理者ログイン
+        </Link>
+      </div>
       <Hero />
       <div className="mx-auto max-w-3xl px-6 pb-16">
         {storesResult.ok ? (

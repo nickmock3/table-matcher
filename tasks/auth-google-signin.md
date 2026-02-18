@@ -17,6 +17,16 @@
   - e2e: 不要（後続TASKで実施）
 - DoD:
   - 仕様書の機能要件 1,2,3 を満たす
+- ステータス:
+  - 完了（2026-02-18）
+- 実行コマンド:
+  - `bun run test`
+  - `bunx eslint . --ignore-pattern '.wrangler/**' --ignore-pattern 'test-results/**'`
+  - `bun run build`
+- 結果要約:
+  - unit: pass
+  - lint: pass（`.wrangler` と `test-results` を除外して実行）
+  - build: pass
 
 ### TASK-AUTH-002: エラーハンドリングと環境分岐整理
 - 内容:
