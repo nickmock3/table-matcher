@@ -2,7 +2,6 @@
 
 import Link from 'next/link';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { mockStoreRepository } from '@/features/top-page/data/storeRepository';
 import {
   isMarkAvailableActionDisabled,
   parseSeatStatusState,
@@ -112,13 +111,8 @@ export function SeatStatusUpdatePageContent() {
     return formatExpiresAt(state.expiresAt);
   }, [state]);
 
-  const fallbackStore = useMemo(() => {
-    if (!state) return null;
-    return mockStoreRepository.findStoreById(state.storeId);
-  }, [state]);
-
-  const displayStoreName = state?.storeName ?? fallbackStore?.name ?? '-';
-  const displayCoverImageUrl = state?.coverImageUrl ?? fallbackStore?.imageUrls?.[0] ?? null;
+  const displayStoreName = state?.storeName ?? '-';
+  const displayCoverImageUrl = state?.coverImageUrl ?? null;
 
   const actionDisabled = isMarkAvailableActionDisabled({ isLoading, isSubmitting, state });
 

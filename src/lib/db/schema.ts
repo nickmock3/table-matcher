@@ -1,4 +1,4 @@
-import { integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
+import { integer, real, sqliteTable, text } from "drizzle-orm/sqlite-core";
 
 const nowEpoch = () => Math.floor(Date.now() / 1000);
 
@@ -63,8 +63,12 @@ export const users = sqliteTable("users", {
 export const stores = sqliteTable("stores", {
   id: text("id").primaryKey(),
   name: text("name").notNull(),
+  address: text("address"),
   city: text("city").notNull(),
   genre: text("genre").notNull(),
+  latitude: real("latitude"),
+  longitude: real("longitude"),
+  imageUrls: text("image_urls"),
   reservationUrl: text("reservation_url").notNull(),
   isPublished: integer("is_published", { mode: "boolean" }).notNull().default(true),
   createdAt: integer("created_at", { mode: "number" }).notNull().$defaultFn(nowEpoch),
