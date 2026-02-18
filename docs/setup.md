@@ -23,6 +23,13 @@ bun install
 - `GOOGLE_REDIRECT_URI_DEV`
 - `GOOGLE_REDIRECT_URI_PROD`
 
+任意項目（local/demo運用時）:
+- `APP_BASE_URL_LOCAL`
+- `APP_BASE_URL_DEMO`
+- `GOOGLE_REDIRECT_URI_LOCAL`
+- `GOOGLE_REDIRECT_URI_DEMO`
+- `APP_ENV`（`local / dev / demo / prod / e2e`）
+
 ## 4. Cloudflare リソース作成（dev/prod）
 ### D1
 ```bash
@@ -54,6 +61,8 @@ wrangler secret put GOOGLE_CLIENT_SECRET --env prod --config wrangler.jsonc
 ## 6. OAuth リダイレクトURI設定
 Google Cloud Console に以下を登録:
 - dev: `APP_BASE_URL_DEV/api/auth/callback/google`
+- demo: `APP_BASE_URL_DEMO/api/auth/callback/google`（利用時）
+- local: `APP_BASE_URL_LOCAL/api/auth/callback/google`（利用時）
 - prod: `APP_BASE_URL_PROD/api/auth/callback/google`
 
 ## 7. マイグレーション

@@ -4,6 +4,7 @@ import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { tryGetCloudflareEnv } from "@/lib/cloudflare";
 import { getDrizzleDb } from "@/lib/db/client";
 import { schema } from "@/lib/db/schema";
+import { resolveAuthUrlsFromEnv } from "@/lib/auth/url-resolver";
 import { readServerEnv } from "@/lib/env";
 
 const getAuthUrls = async () => {
@@ -11,9 +12,7 @@ const getAuthUrls = async () => {
   const cfEnv = await tryGetCloudflareEnv();
   const appEnv = cfEnv?.APP_ENV ?? env.APP_ENV;
 
-  const baseURL = appEnv === "prod" ? env.APP_BASE_URL_PROD : env.APP_BASE_URL_DEV;
-  const redirectURI =
-    appEnv === "prod" ? env.GOOGLE_REDIRECT_URI_PROD : env.GOOGLE_REDIRECT_URI_DEV;
+  const { baseURL, redirectURI } = resolveAuthUrlsFromEnv(env, appEnv);
 
   return { baseURL, redirectURI, env };
 };
