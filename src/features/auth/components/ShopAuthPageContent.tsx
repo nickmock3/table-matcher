@@ -16,12 +16,30 @@ const parseErrorMessage = (value: unknown, fallback: string): string => {
   return fallback;
 };
 
+const buildTroubleshootingHint = (message: string): string | null => {
+  if (message.includes('Invalid origin')) {
+    return 'APP_BASE_URL と Google OAuth の Origin / Redirect URI を同一URLで揃えてください。';
+  }
+  if (message.includes('Auth is not available in this runtime')) {
+    return '`bun run dev:cf` で起動し、Cloudflareバインディングを有効化してください。';
+  }
+  if (message.includes('redirect_uri_mismatch')) {
+    return 'Google Cloud Console の Redirect URI 登録値が実行URLと一致しているか確認してください。';
+  }
+  return null;
+};
+
 export function ShopAuthPageContent() {
   const sessionState = authClient.useSession();
   const [actionError, setActionError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const sessionUser = useMemo(() => sessionState.data?.user ?? null, [sessionState.data]);
+  const sessionErrorMessage = useMemo(() => {
+    return parseErrorMessage(sessionState.error, '');
+  }, [sessionState.error]);
+  const combinedErrorMessage = actionError ?? sessionErrorMessage;
+  const troubleshootingHint = combinedErrorMessage ? buildTroubleshootingHint(combinedErrorMessage) : null;
 
   const handleGoogleSignIn = async () => {
     setIsSubmitting(true);
@@ -109,8 +127,20 @@ export function ShopAuthPageContent() {
           </Link>
         </div>
 
-        {actionError ? (
-          <p className="mt-4 rounded-md border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700">{actionError}</p>
+        {combinedErrorMessage ? (
+          <div className="mt-4 rounded-md border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700">
+            <p>{combinedErrorMessage}</p>
+            {troubleshootingHint ? <p className="mt-1">{troubleshootingHint}</p> : null}
+            <button
+              type="button"
+              className="mt-2 inline-flex underline"
+              onClick={() => {
+                void sessionState.refetch();
+              }}
+            >
+              セッションを再確認
+            </button>
+          </div>
         ) : null}
 
         <div className="mt-6">

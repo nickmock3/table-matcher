@@ -39,6 +39,16 @@
   - e2e: 任意
 - DoD:
   - 仕様書の機能要件 4 を満たす
+- ステータス:
+  - 完了（2026-02-18）
+- 実行コマンド:
+  - `bun run test`
+  - `bun run lint -- --ignore-pattern '.wrangler/**' --ignore-pattern 'test-results/**'`
+  - `bun run build`
+- 結果要約:
+  - unit: pass
+  - lint: pass
+  - build: pass
 
 ### TASK-AUTH-003: 主要導線E2Eと手順仕上げ
 - 内容:
