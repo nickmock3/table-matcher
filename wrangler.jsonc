@@ -1,206 +1,209 @@
 {
-  "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "table-matcher",
-  "main": ".open-next/worker.js",
-  "compatibility_date": "2026-02-10",
-  "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
-  "assets": {
-    "directory": ".open-next/assets",
-    "binding": "ASSETS"
-  },
-  "images": {
-    "binding": "IMAGES"
-  },
-  "services": [
-    {
-      "binding": "WORKER_SELF_REFERENCE",
-      "service": "table-matcher"
-    }
-  ],
-  "vars": {
-    "APP_NAME": "table-matcher",
-    "APP_TIMEZONE": "Asia/Tokyo",
-    "APP_ENV": "dev",
-    "APP_BASE_URL_DEV": "https://table-matcher-dev.<your-subdomain>.workers.dev",
-    "APP_BASE_URL_PROD": "https://example.com",
-    "GOOGLE_REDIRECT_URI_DEV": "https://table-matcher-dev.<your-subdomain>.workers.dev/api/auth/callback/google",
-    "GOOGLE_REDIRECT_URI_PROD": "https://example.com/api/auth/callback/google"
-  },
-  "d1_databases": [
-    {
-      "binding": "DB",
-      "database_name": "table-matcher-dev",
-      "database_id": "00000000-0000-0000-0000-000000000000",
-      "migrations_dir": "drizzle"
-    }
-  ],
-  "r2_buckets": [
-    {
-      "binding": "BUCKET_IMAGES",
-      "bucket_name": "table-matcher-images-dev"
-    },
-    {
-      "binding": "NEXT_INC_CACHE_R2_BUCKET",
-      "bucket_name": "table-matcher-cache-dev"
-    }
-  ],
-  "env": {
-    "dev": {
-      "name": "table-matcher-dev",
-      "images": {
-        "binding": "IMAGES"
-      },
-      "vars": {
-        "APP_NAME": "table-matcher",
-        "APP_TIMEZONE": "Asia/Tokyo",
-        "APP_ENV": "dev",
-        "APP_BASE_URL_DEV": "https://table-matcher-dev.<your-subdomain>.workers.dev",
-        "APP_BASE_URL_PROD": "https://example.com",
-        "GOOGLE_REDIRECT_URI_DEV": "https://table-matcher-dev.<your-subdomain>.workers.dev/api/auth/callback/google",
-        "GOOGLE_REDIRECT_URI_PROD": "https://example.com/api/auth/callback/google"
-      },
-      "d1_databases": [
-        {
-          "binding": "DB",
-          "database_name": "table-matcher-dev",
-          "database_id": "00000000-0000-0000-0000-000000000000",
-          "migrations_dir": "drizzle"
-        }
-      ],
-      "r2_buckets": [
-        {
-          "binding": "BUCKET_IMAGES",
-          "bucket_name": "table-matcher-images-dev"
-        },
-        {
-          "binding": "NEXT_INC_CACHE_R2_BUCKET",
-          "bucket_name": "table-matcher-cache-dev"
-        }
-      ],
-      "services": [
-        {
-          "binding": "WORKER_SELF_REFERENCE",
-          "service": "table-matcher-dev"
-        }
-      ]
-    },
-    "e2e": {
-      "name": "table-matcher-e2e",
-      "images": {
-        "binding": "IMAGES"
-      },
-      "vars": {
-        "APP_NAME": "table-matcher",
-        "APP_TIMEZONE": "Asia/Tokyo",
-        "APP_ENV": "dev",
-        "E2E_FORCE_ERROR_ENABLED": "1",
-        "APP_BASE_URL_DEV": "https://table-matcher-dev.<your-subdomain>.workers.dev",
-        "APP_BASE_URL_PROD": "https://example.com",
-        "GOOGLE_REDIRECT_URI_DEV": "https://table-matcher-dev.<your-subdomain>.workers.dev/api/auth/callback/google",
-        "GOOGLE_REDIRECT_URI_PROD": "https://example.com/api/auth/callback/google"
-      },
-      "d1_databases": [
-        {
-          "binding": "DB",
-          "database_name": "table-matcher-dev",
-          "database_id": "00000000-0000-0000-0000-000000000000",
-          "migrations_dir": "drizzle"
-        }
-      ],
-      "r2_buckets": [
-        {
-          "binding": "BUCKET_IMAGES",
-          "bucket_name": "table-matcher-images-dev"
-        },
-        {
-          "binding": "NEXT_INC_CACHE_R2_BUCKET",
-          "bucket_name": "table-matcher-cache-dev"
-        }
-      ],
-      "services": [
-        {
-          "binding": "WORKER_SELF_REFERENCE",
-          "service": "table-matcher-dev"
-        }
-      ]
-    },
-    "demo": {
-      "name": "table-matcher-demo",
-      "images": {
-        "binding": "IMAGES"
-      },
-      "vars": {
-        "APP_NAME": "table-matcher",
-        "APP_TIMEZONE": "Asia/Tokyo",
-        "APP_ENV": "dev",
-        "APP_BASE_URL_DEV": "https://table-matcher-demo.<your-subdomain>.workers.dev",
-        "APP_BASE_URL_PROD": "https://example.com",
-        "GOOGLE_REDIRECT_URI_DEV": "https://table-matcher-demo.<your-subdomain>.workers.dev/api/auth/callback/google",
-        "GOOGLE_REDIRECT_URI_PROD": "https://example.com/api/auth/callback/google"
-      },
-      "d1_databases": [
-        {
-          "binding": "DB",
-          "database_name": "table-matcher-dev",
-          "database_id": "00000000-0000-0000-0000-000000000000",
-          "migrations_dir": "drizzle"
-        }
-      ],
-      "r2_buckets": [
-        {
-          "binding": "BUCKET_IMAGES",
-          "bucket_name": "table-matcher-images-dev"
-        },
-        {
-          "binding": "NEXT_INC_CACHE_R2_BUCKET",
-          "bucket_name": "table-matcher-cache-dev"
-        }
-      ],
-      "services": [
-        {
-          "binding": "WORKER_SELF_REFERENCE",
-          "service": "table-matcher-demo"
-        }
-      ]
-    },
-    "prod": {
-      "name": "table-matcher-prod",
-      "images": {
-        "binding": "IMAGES"
-      },
-      "vars": {
-        "APP_NAME": "table-matcher",
-        "APP_TIMEZONE": "Asia/Tokyo",
-        "APP_ENV": "prod",
-        "APP_BASE_URL_DEV": "https://table-matcher-dev.<your-subdomain>.workers.dev",
-        "APP_BASE_URL_PROD": "https://example.com",
-        "GOOGLE_REDIRECT_URI_DEV": "https://table-matcher-dev.<your-subdomain>.workers.dev/api/auth/callback/google",
-        "GOOGLE_REDIRECT_URI_PROD": "https://example.com/api/auth/callback/google"
-      },
-      "d1_databases": [
-        {
-          "binding": "DB",
-          "database_name": "table-matcher-prod",
-          "database_id": "00000000-0000-0000-0000-000000000001",
-          "migrations_dir": "drizzle"
-        }
-      ],
-      "r2_buckets": [
-        {
-          "binding": "BUCKET_IMAGES",
-          "bucket_name": "table-matcher-images-prod"
-        },
-        {
-          "binding": "NEXT_INC_CACHE_R2_BUCKET",
-          "bucket_name": "table-matcher-cache-prod"
-        }
-      ],
-      "services": [
-        {
-          "binding": "WORKER_SELF_REFERENCE",
-          "service": "table-matcher-prod"
-        }
-      ]
-    }
-  }
+	"$schema": "node_modules/wrangler/config-schema.json",
+	"name": "table-matcher",
+	"main": ".open-next/worker.js",
+	"compatibility_date": "2026-02-10",
+	"compatibility_flags": [
+		"nodejs_compat",
+		"global_fetch_strictly_public"
+	],
+	"assets": {
+		"directory": ".open-next/assets",
+		"binding": "ASSETS"
+	},
+	"images": {
+		"binding": "IMAGES"
+	},
+	"services": [
+		{
+			"binding": "WORKER_SELF_REFERENCE",
+			"service": "table-matcher"
+		}
+	],
+	"vars": {
+		"APP_NAME": "table-matcher",
+		"APP_TIMEZONE": "Asia/Tokyo",
+		"APP_ENV": "dev",
+		"APP_BASE_URL_DEV": "https://table-matcher-dev.<your-subdomain>.workers.dev",
+		"APP_BASE_URL_PROD": "https://example.com",
+		"GOOGLE_REDIRECT_URI_DEV": "https://table-matcher-dev.<your-subdomain>.workers.dev/api/auth/callback/google",
+		"GOOGLE_REDIRECT_URI_PROD": "https://example.com/api/auth/callback/google"
+	},
+	"d1_databases": [
+		{
+			"binding": "DB",
+			"database_name": "table-matcher-dev",
+			"database_id": "00000000-0000-0000-0000-000000000000",
+			"migrations_dir": "drizzle"
+		}
+	],
+	"r2_buckets": [
+		{
+			"binding": "BUCKET_IMAGES",
+			"bucket_name": "table-matcher-images-dev"
+		},
+		{
+			"binding": "NEXT_INC_CACHE_R2_BUCKET",
+			"bucket_name": "table-matcher-cache-dev"
+		}
+	],
+	"env": {
+		"dev": {
+			"name": "table-matcher-dev",
+			"images": {
+				"binding": "IMAGES"
+			},
+			"vars": {
+				"APP_NAME": "table-matcher",
+				"APP_TIMEZONE": "Asia/Tokyo",
+				"APP_ENV": "dev",
+				"APP_BASE_URL_DEV": "https://table-matcher-dev.<your-subdomain>.workers.dev",
+				"APP_BASE_URL_PROD": "https://example.com",
+				"GOOGLE_REDIRECT_URI_DEV": "https://table-matcher-dev.<your-subdomain>.workers.dev/api/auth/callback/google",
+				"GOOGLE_REDIRECT_URI_PROD": "https://example.com/api/auth/callback/google"
+			},
+			"d1_databases": [
+				{
+					"binding": "DB",
+					"database_name": "table-matcher-dev",
+					"database_id": "00000000-0000-0000-0000-000000000000",
+					"migrations_dir": "drizzle"
+				}
+			],
+			"r2_buckets": [
+				{
+					"binding": "BUCKET_IMAGES",
+					"bucket_name": "table-matcher-images-dev"
+				},
+				{
+					"binding": "NEXT_INC_CACHE_R2_BUCKET",
+					"bucket_name": "table-matcher-cache-dev"
+				}
+			],
+			"services": [
+				{
+					"binding": "WORKER_SELF_REFERENCE",
+					"service": "table-matcher-dev"
+				}
+			]
+		},
+		"e2e": {
+			"name": "table-matcher-e2e",
+			"images": {
+				"binding": "IMAGES"
+			},
+			"vars": {
+				"APP_NAME": "table-matcher",
+				"APP_TIMEZONE": "Asia/Tokyo",
+				"APP_ENV": "dev",
+				"E2E_FORCE_ERROR_ENABLED": "1",
+				"APP_BASE_URL_DEV": "https://table-matcher-dev.<your-subdomain>.workers.dev",
+				"APP_BASE_URL_PROD": "https://example.com",
+				"GOOGLE_REDIRECT_URI_DEV": "https://table-matcher-dev.<your-subdomain>.workers.dev/api/auth/callback/google",
+				"GOOGLE_REDIRECT_URI_PROD": "https://example.com/api/auth/callback/google"
+			},
+			"d1_databases": [
+				{
+					"binding": "DB",
+					"database_name": "table-matcher-dev",
+					"database_id": "00000000-0000-0000-0000-000000000000",
+					"migrations_dir": "drizzle"
+				}
+			],
+			"r2_buckets": [
+				{
+					"binding": "BUCKET_IMAGES",
+					"bucket_name": "table-matcher-images-dev"
+				},
+				{
+					"binding": "NEXT_INC_CACHE_R2_BUCKET",
+					"bucket_name": "table-matcher-cache-dev"
+				}
+			],
+			"services": [
+				{
+					"binding": "WORKER_SELF_REFERENCE",
+					"service": "table-matcher-dev"
+				}
+			]
+		},
+		"demo": {
+			"name": "table-matcher-demo",
+			"images": {
+				"binding": "IMAGES"
+			},
+			"vars": {
+				"APP_NAME": "table-matcher",
+				"APP_TIMEZONE": "Asia/Tokyo",
+				"APP_ENV": "demo",
+				"APP_BASE_URL_DEV": "https://table-matcher-demo.hr787754.workers.dev",
+				"APP_BASE_URL_PROD": "https://example.com",
+				"GOOGLE_REDIRECT_URI_DEV": "https://table-matcher-demo.hr787754.workers.dev/api/auth/callback/google",
+				"GOOGLE_REDIRECT_URI_PROD": "https://example.com/api/auth/callback/google"
+			},
+			"d1_databases": [
+				{
+					"binding": "DB",
+					"database_name": "table-matcher-demo",
+					"database_id": "727ce753-9f80-475e-bbd8-ee561f7937f1",
+					"migrations_dir": "drizzle"
+				}
+			],
+			"r2_buckets": [
+				{
+					"binding": "BUCKET_IMAGES",
+					"bucket_name": "table-matcher-images-demo"
+				},
+				{
+					"binding": "NEXT_INC_CACHE_R2_BUCKET",
+					"bucket_name": "table-matcher-cache-demo"
+				}
+			],
+			"services": [
+				{
+					"binding": "WORKER_SELF_REFERENCE",
+					"service": "table-matcher-demo"
+				}
+			]
+		},
+		"prod": {
+			"name": "table-matcher-prod",
+			"images": {
+				"binding": "IMAGES"
+			},
+			"vars": {
+				"APP_NAME": "table-matcher",
+				"APP_TIMEZONE": "Asia/Tokyo",
+				"APP_ENV": "prod",
+				"APP_BASE_URL_DEV": "https://table-matcher-dev.<your-subdomain>.workers.dev",
+				"APP_BASE_URL_PROD": "https://example.com",
+				"GOOGLE_REDIRECT_URI_DEV": "https://table-matcher-dev.<your-subdomain>.workers.dev/api/auth/callback/google",
+				"GOOGLE_REDIRECT_URI_PROD": "https://example.com/api/auth/callback/google"
+			},
+			"d1_databases": [
+				{
+					"binding": "DB",
+					"database_name": "table-matcher-prod",
+					"database_id": "00000000-0000-0000-0000-000000000001",
+					"migrations_dir": "drizzle"
+				}
+			],
+			"r2_buckets": [
+				{
+					"binding": "BUCKET_IMAGES",
+					"bucket_name": "table-matcher-images-prod"
+				},
+				{
+					"binding": "NEXT_INC_CACHE_R2_BUCKET",
+					"bucket_name": "table-matcher-cache-prod"
+				}
+			],
+			"services": [
+				{
+					"binding": "WORKER_SELF_REFERENCE",
+					"service": "table-matcher-prod"
+				}
+			]
+		}
+	}
 }
