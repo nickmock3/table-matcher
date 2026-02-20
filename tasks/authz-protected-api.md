@@ -40,6 +40,16 @@
   - e2e: 任意（後続で主要導線確認）
 - DoD:
   - 仕様書の機能要件 3 を満たす
+- ステータス:
+  - 完了（2026-02-20）
+- 実行コマンド:
+  - `bun run test -- src/features/authz/guards.test.ts src/features/store-vacancy-update/update-seat-status.test.ts`
+  - `bun run lint -- --ignore-pattern '.wrangler/**' --ignore-pattern 'test-results/**'`
+  - `bun run test`
+- 結果要約:
+  - unit（authz/store-vacancy-update）: pass
+  - lint: pass
+  - unit（all）: pass
 
 ### TASK-AUTHZ-003: 主要導線E2Eと仕上げ
 - 内容:

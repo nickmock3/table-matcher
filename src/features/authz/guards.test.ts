@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { createAuthzErrorResponse, requireRole, requireSession } from './guards';
+import { createAuthzErrorResponse, requireRole, requireSession, requireStoreScope } from './guards';
 
 describe('createAuthzErrorResponse', () => {
   it('ok=falseとmessageを含むエラーレスポンスを返す', async () => {
@@ -91,5 +91,74 @@ describe('requireRole', () => {
   it('ロールが許可対象の場合は成功する', () => {
     const result = requireRole('admin', ['admin', 'shop']);
     expect(result).toEqual({ ok: true });
+  });
+});
+
+describe('requireStoreScope', () => {
+  it('紐づけがない場合は403を返す', async () => {
+    const result = await requireStoreScope(
+      { loginEmail: 'none@example.com' },
+      { listStoreLinks: async () => [] },
+    );
+
+    expect(result.ok).toBe(false);
+    if (result.ok) return;
+
+    const payload = (await result.response.json()) as { ok: boolean; message: string };
+    expect(result.response.status).toBe(403);
+    expect(payload).toEqual({
+      ok: false,
+      message: 'Forbidden',
+    });
+  });
+
+  it('指定店舗が自店舗と一致する場合は許可される', async () => {
+    const result = await requireStoreScope(
+      { loginEmail: 'shop@example.com', requestedStoreId: '3' },
+      {
+        listStoreLinks: async () => [
+          { storeId: '3', storeName: '和食処 さくら' },
+          { storeId: '4', storeName: 'フレンチビストロ パリ' },
+        ],
+      },
+    );
+
+    expect(result).toEqual({
+      ok: true,
+      link: { storeId: '3', storeName: '和食処 さくら' },
+    });
+  });
+
+  it('指定店舗が他店舗の場合は403を返す', async () => {
+    const result = await requireStoreScope(
+      { loginEmail: 'shop@example.com', requestedStoreId: '9' },
+      {
+        listStoreLinks: async () => [{ storeId: '3', storeName: '和食処 さくら' }],
+      },
+    );
+
+    expect(result.ok).toBe(false);
+    if (result.ok) return;
+
+    expect(result.response.status).toBe(403);
+  });
+
+  it('店舗未指定で複数紐づけの場合は409を返す', async () => {
+    const result = await requireStoreScope(
+      { loginEmail: 'shop@example.com' },
+      {
+        listStoreLinks: async () => [{ storeId: '3' }, { storeId: '4' }],
+      },
+    );
+
+    expect(result.ok).toBe(false);
+    if (result.ok) return;
+
+    const payload = (await result.response.json()) as { ok: boolean; message: string };
+    expect(result.response.status).toBe(409);
+    expect(payload).toEqual({
+      ok: false,
+      message: 'Multiple linked stores found',
+    });
   });
 });
