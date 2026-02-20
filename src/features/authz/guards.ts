@@ -15,6 +15,16 @@ type RequireSessionDependencies = {
   getSession?: GetSession;
 };
 
+type StoreScopedLink = {
+  storeId: string;
+};
+
+type ListStoreLinks<TLink extends StoreScopedLink> = (loginEmail: string) => Promise<readonly TLink[]>;
+
+type RequireStoreScopeDependencies<TLink extends StoreScopedLink> = {
+  listStoreLinks: ListStoreLinks<TLink>;
+};
+
 export type SessionGuardResult =
   | {
       ok: true;
@@ -31,6 +41,16 @@ export type SessionGuardResult =
 export type RoleGuardResult =
   | {
       ok: true;
+    }
+  | {
+      ok: false;
+      response: Response;
+    };
+
+export type StoreScopeGuardResult<TLink extends StoreScopedLink> =
+  | {
+      ok: true;
+      link: TLink;
     }
   | {
       ok: false;
@@ -84,4 +104,48 @@ export const requireRole = (
   }
 
   return { ok: true };
+};
+
+export const requireStoreScope = async <TLink extends StoreScopedLink>(
+  params: {
+    loginEmail: string;
+    requestedStoreId?: string;
+  },
+  dependencies: RequireStoreScopeDependencies<TLink>,
+): Promise<StoreScopeGuardResult<TLink>> => {
+  const links = await dependencies.listStoreLinks(params.loginEmail);
+
+  if (links.length === 0) {
+    return {
+      ok: false,
+      response: createAuthzErrorResponse(403, 'Forbidden'),
+    };
+  }
+
+  if (params.requestedStoreId) {
+    const matched = links.find((link) => link.storeId === params.requestedStoreId);
+    if (!matched) {
+      return {
+        ok: false,
+        response: createAuthzErrorResponse(403, 'Forbidden'),
+      };
+    }
+
+    return {
+      ok: true,
+      link: matched,
+    };
+  }
+
+  if (links.length > 1) {
+    return {
+      ok: false,
+      response: Response.json({ ok: false, message: 'Multiple linked stores found' }, { status: 409 }),
+    };
+  }
+
+  return {
+    ok: true,
+    link: links[0],
+  };
 };

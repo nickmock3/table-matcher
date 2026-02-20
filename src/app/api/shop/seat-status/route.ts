@@ -6,9 +6,9 @@ import {
   updateSeatStatusForStoreUser,
   type SeatStatusUpdateRepository,
 } from '@/features/store-vacancy-update/update-seat-status';
+import { requireSession, requireStoreScope } from '@/features/authz/guards';
 import { parseStoreImageUrls } from '@/features/store-data/store-model';
 import { resolveCurrentSeatStatus } from '@/features/store-vacancy-update/seat-status-view';
-import { createAuth } from '@/lib/auth/server';
 import { getDrizzleDb } from '@/lib/db/client';
 import { seatStatusUpdates, storeUserLinks, stores } from '@/lib/db/schema';
 
@@ -50,14 +50,7 @@ const createRepository = async (): Promise<SeatStatusUpdateRepository> => {
   };
 };
 
-const resolveStoreLink = async (loginEmail: string): Promise<
-  | { ok: true; link: StoreLink }
-  | {
-      ok: false;
-      status: number;
-      message: string;
-    }
-> => {
+const listStoreLinks = async (loginEmail: string): Promise<readonly StoreLink[]> => {
   const db = await getDrizzleDb();
 
   const links = await db
@@ -71,68 +64,22 @@ const resolveStoreLink = async (loginEmail: string): Promise<
     .innerJoin(stores, eq(storeUserLinks.storeId, stores.id))
     .where(eq(storeUserLinks.loginEmail, loginEmail));
 
-  if (links.length === 0) {
-    return {
-      ok: false,
-      status: 403,
-      message: 'Linked store not found',
-    };
-  }
-
-  if (links.length > 1) {
-    return {
-      ok: false,
-      status: 409,
-      message: 'Multiple linked stores found',
-    };
-  }
-
-  return {
-    ok: true,
-    link: links[0],
-  };
-};
-
-const getSessionEmail = async (
-  request: Request,
-): Promise<
-  | {
-      ok: true;
-      email: string;
-    }
-  | {
-      ok: false;
-      response: Response;
-    }
-> => {
-  const auth = await createAuth();
-  const session = await auth.api.getSession({
-    headers: request.headers,
-  });
-
-  if (!session?.user?.email) {
-    return {
-      ok: false,
-      response: Response.json({ ok: false, message: 'Unauthorized' }, { status: 401 }),
-    };
-  }
-
-  return {
-    ok: true,
-    email: session.user.email,
-  };
+  return links;
 };
 
 export async function GET(request: Request) {
   try {
-    const sessionResult = await getSessionEmail(request);
+    const sessionResult = await requireSession(request);
     if (!sessionResult.ok) {
       return sessionResult.response;
     }
 
-    const linkResult = await resolveStoreLink(sessionResult.email);
-    if (!linkResult.ok) {
-      return Response.json({ ok: false, message: linkResult.message }, { status: linkResult.status });
+    const scopeResult = await requireStoreScope(
+      { loginEmail: sessionResult.user.email },
+      { listStoreLinks },
+    );
+    if (!scopeResult.ok) {
+      return scopeResult.response;
     }
 
     const db = await getDrizzleDb();
@@ -142,7 +89,7 @@ export async function GET(request: Request) {
         expiresAt: seatStatusUpdates.expiresAt,
       })
       .from(seatStatusUpdates)
-      .where(eq(seatStatusUpdates.storeId, linkResult.link.storeId))
+      .where(eq(seatStatusUpdates.storeId, scopeResult.link.storeId))
       .orderBy(desc(seatStatusUpdates.createdAt), desc(seatStatusUpdates.id))
       .limit(1);
 
@@ -153,9 +100,9 @@ export async function GET(request: Request) {
     return Response.json(
       {
         ok: true,
-        storeId: linkResult.link.storeId,
-        storeName: linkResult.link.storeName,
-        coverImageUrl: parseStoreImageUrls(linkResult.link.storeImageUrls)[0] ?? null,
+        storeId: scopeResult.link.storeId,
+        storeName: scopeResult.link.storeName,
+        coverImageUrl: parseStoreImageUrls(scopeResult.link.storeImageUrls)[0] ?? null,
         currentStatus: current.currentStatus,
         expiresAt: current.expiresAt,
         canMarkAvailable: current.canMarkAvailable,
@@ -169,7 +116,7 @@ export async function GET(request: Request) {
 
 export async function POST(request: Request) {
   try {
-    const sessionResult = await getSessionEmail(request);
+    const sessionResult = await requireSession(request);
     if (!sessionResult.ok) {
       return sessionResult.response;
     }
@@ -193,13 +140,15 @@ export async function POST(request: Request) {
       );
     }
 
-    const linkResult = await resolveStoreLink(sessionResult.email);
-    if (!linkResult.ok) {
-      return Response.json({ ok: false, message: linkResult.message }, { status: linkResult.status });
-    }
-
-    if (parsed.data.storeId && parsed.data.storeId !== linkResult.link.storeId) {
-      return Response.json({ ok: false, message: 'Forbidden' }, { status: 403 });
+    const scopeResult = await requireStoreScope(
+      {
+        loginEmail: sessionResult.user.email,
+        requestedStoreId: parsed.data.storeId,
+      },
+      { listStoreLinks },
+    );
+    if (!scopeResult.ok) {
+      return scopeResult.response;
     }
 
     const repository = await createRepository();
@@ -207,8 +156,8 @@ export async function POST(request: Request) {
 
     const result = await updateSeatStatusForStoreUser(
       {
-        loginEmail: sessionResult.email,
-        storeId: linkResult.link.storeId,
+        loginEmail: sessionResult.user.email,
+        storeId: scopeResult.link.storeId,
         status,
       },
       { repository },
@@ -221,7 +170,7 @@ export async function POST(request: Request) {
     return Response.json(
       {
         ok: true,
-        storeId: linkResult.link.storeId,
+        storeId: scopeResult.link.storeId,
         status,
         expiresAt: result.expiresAt,
       },
