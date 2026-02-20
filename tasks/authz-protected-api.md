@@ -18,6 +18,16 @@
   - e2e: 不要
 - DoD:
   - 仕様書の機能要件 1,2,4,5 を満たす
+- ステータス:
+  - 完了（2026-02-20）
+- 実行コマンド:
+  - `bun run test -- src/features/authz/guards.test.ts`
+  - `bun run lint -- --ignore-pattern '.wrangler/**' --ignore-pattern 'test-results/**'`
+  - `bun run test`
+- 結果要約:
+  - unit（authz guards）: pass
+  - lint: pass
+  - unit（all）: pass
 
 ### TASK-AUTHZ-002: 店舗スコープガード適用
 - 内容:
