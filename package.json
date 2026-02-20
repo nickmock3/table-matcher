@@ -20,6 +20,7 @@
     "db:migrate:prod": "wrangler d1 migrations apply table-matcher-prod --env prod --config wrangler.jsonc",
     "db:migrate:local": "wrangler d1 migrations apply table-matcher-dev --local --env dev --config wrangler.jsonc",
     "db:seed:local": "wrangler d1 execute table-matcher-dev --local --env dev --config wrangler.jsonc --file seeds/seed.local.sql",
+    "db:seed:demo": "wrangler d1 execute table-matcher-demo --remote --env demo --config wrangler.jsonc --file seeds/seed.demo.sql",
     "deploy:dev": "bun run build:cf && wrangler deploy --env dev --config wrangler.jsonc",
     "deploy:demo": "bun run build:cf && wrangler deploy --env demo --config wrangler.jsonc",
     "deploy:prod": "bun run build:cf && wrangler deploy --env prod --config wrangler.jsonc"

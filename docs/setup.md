@@ -76,6 +76,12 @@ bun run db:migrate:dev
 bun run db:migrate:local
 ```
 
+demo 用（リモートD1）:
+```bash
+wrangler d1 migrations apply table-matcher-demo --remote --env demo --config wrangler.jsonc
+bun run db:seed:demo
+```
+
 ### 7.1 ローカルD1の初期データ投入（E2E/画面確認用）
 1. ローカルD1へマイグレーションを適用:
 ```bash
@@ -100,6 +106,7 @@ wrangler d1 execute table-matcher-dev --local --env dev --config wrangler.jsonc 
 補足:
 - `db:seed:local` は `seeds/seed.local.sql` を実行する。
 - `seeds/seed.local.sql` はローカル開発用のデータとして管理する。
+- `db:seed:demo` は `seeds/seed.demo.sql` をリモートD1（demo）へ適用する。
 - seedには `users` / `store_user_links` も含まれる。初期紐付けは以下:
   - `shop-sakura@example.com` -> `store_id: 3`（和食処 さくら）
   - `shop-bluesky@example.com` -> `store_id: 1`（カフェ ブルースカイ）
