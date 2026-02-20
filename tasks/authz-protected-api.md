@@ -63,6 +63,18 @@
 - DoD:
   - 仕様書の受け入れ条件 1-5 を主要導線として確認できる
   - `bun run lint` / `bun run test` / `bun run e2e` / `bun run build` が通過
+- ステータス:
+  - 完了（2026-02-20）
+- 実行コマンド:
+  - `bun run lint -- --ignore-pattern '.wrangler/**' --ignore-pattern 'test-results/**'`
+  - `bun run test`
+  - `bun run e2e`
+  - `bun run build`
+- 結果要約:
+  - lint: pass
+  - unit: pass
+  - e2e: pass（12件）
+  - build: pass
 
 ## 補足
 - まずは店舗ユーザー向けAPIから適用し、管理者APIは後続機能で段階適用する。
