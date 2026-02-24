@@ -9,6 +9,40 @@ type RequireAdminAccessDependencies = {
   resolveRoleByEmail?: ResolveRoleByEmail;
   requireSessionFn?: typeof requireSession;
   requireRoleFn?: typeof requireRole;
+  e2eAdminRoleOverride?: string | null;
+};
+
+const resolveE2EOverride = (headerValue: string | null): RequireAdminAccessResult | null => {
+  if (
+    process.env.E2E_FORCE_ERROR_ENABLED !== '1' ||
+    process.env.E2E_ADMIN_AUTH_OVERRIDE_ENABLED !== '1' ||
+    !headerValue
+  ) {
+    return null;
+  }
+
+  if (headerValue === 'admin') {
+    return {
+      ok: true,
+      email: 'e2e-admin@example.com',
+    };
+  }
+
+  if (headerValue === 'shop') {
+    return {
+      ok: false,
+      response: Response.json({ ok: false, message: 'Forbidden' }, { status: 403 }),
+    };
+  }
+
+  if (headerValue === 'unauthorized') {
+    return {
+      ok: false,
+      response: Response.json({ ok: false, message: 'Unauthorized' }, { status: 401 }),
+    };
+  }
+
+  return null;
 };
 
 const defaultResolveRoleByEmail: ResolveRoleByEmail = async (email) => {
@@ -31,6 +65,13 @@ export const requireAdminAccess = async (
   request: Request,
   dependencies?: RequireAdminAccessDependencies,
 ): Promise<RequireAdminAccessResult> => {
+  const override = resolveE2EOverride(
+    dependencies?.e2eAdminRoleOverride ?? request.headers.get('x-e2e-admin-role'),
+  );
+  if (override) {
+    return override;
+  }
+
   const requireSessionFn = dependencies?.requireSessionFn ?? requireSession;
   const requireRoleFn = dependencies?.requireRoleFn ?? requireRole;
 

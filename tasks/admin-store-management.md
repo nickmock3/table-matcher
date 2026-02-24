@@ -67,6 +67,18 @@
 - DoD:
   - 仕様書の受け入れ条件 1-5 を主要導線として確認できる
   - `bun run lint` / `bun run test` / `bun run e2e` / `bun run build` が通過
+- ステータス:
+  - 完了（2026-02-24）
+- 実行コマンド:
+  - `bun run lint -- --ignore-pattern '.wrangler/**' --ignore-pattern 'test-results/**'`
+  - `bun run test`
+  - `bun run e2e`
+  - `bun run build`
+- 結果要約:
+  - lint: pass
+  - unit: pass（79 tests）
+  - e2e: pass（16 tests）
+  - build: pass
 
 ## 補足
 - 管理者メニュー導線は既存ログイン導線との整合を確認し、UI配置を過剰に拡張しない。
