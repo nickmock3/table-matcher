@@ -69,6 +69,17 @@ bun run db:migrate:dev
 bun run db:migrate:prod
 ```
 
+## ローカル管理者ロール付与
+ローカルで管理者画面を確認する場合は、`users` テーブルに管理者メールを登録します。
+
+```bash
+wrangler d1 execute table-matcher-dev \
+  --local --env dev --config wrangler.jsonc \
+  --command "INSERT INTO users (id, email, role, created_at, updated_at)
+             VALUES ('admin-local', 'あなたのGoogleメールアドレス', 'admin', strftime('%s','now'), strftime('%s','now'))
+             ON CONFLICT(email) DO UPDATE SET role='admin', updated_at=strftime('%s','now');"
+```
+
 ## 参照ドキュメント
 - `docs/setup.md`（環境構築手順）
 - `docs/development-policy.md`（開発方針・DoD・レビュー基準）

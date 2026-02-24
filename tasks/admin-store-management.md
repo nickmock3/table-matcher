@@ -41,6 +41,18 @@
   - e2e: 任意（主要導線は次タスク）
 - DoD:
   - 仕様書の機能要件 2,3,4 を満たす
+- ステータス:
+  - 完了（2026-02-24）
+- 実行コマンド:
+  - `bun run test -- src/features/admin-store-management/admin-store-form.test.ts src/features/admin-store-management/admin-store-list.test.ts src/features/admin-store-management/store-input.test.ts src/features/admin-store-management/admin-auth.test.ts`
+  - `bun run lint -- --ignore-pattern '.wrangler/**' --ignore-pattern 'test-results/**'`
+  - `bun run test`
+  - `bun run build`
+- 結果要約:
+  - unit（admin-store-management）: pass
+  - lint: pass
+  - unit（all）: pass
+  - build: pass
 
 ### TASK-ASM-003: E2Eと公開反映確認
 - 内容:
