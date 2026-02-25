@@ -98,6 +98,7 @@
 					"APP_ENV": "dev",
 					"E2E_FORCE_ERROR_ENABLED": "1",
 					"E2E_ADMIN_AUTH_OVERRIDE_ENABLED": "1",
+					"E2E_SHOP_IMAGE_AUTH_OVERRIDE_ENABLED": "1",
 					"APP_BASE_URL_DEV": "https://table-matcher-dev.<your-subdomain>.workers.dev",
 					"APP_BASE_URL_PROD": "https://example.com",
 					"GOOGLE_REDIRECT_URI_DEV": "https://table-matcher-dev.<your-subdomain>.workers.dev/api/auth/callback/google",

@@ -6,6 +6,7 @@ import {
   serializeImageUrls,
   shopStoreImageUpdateSchema,
 } from '@/features/store-user-image-management/image-management-input';
+import { requireShopImageAccess } from '@/features/store-user-image-management/shop-image-auth';
 import { extractStoreImageObjectKey } from '@/features/store-user-image-management/image-storage';
 import {
   listStoreImageLinks,
@@ -22,13 +23,15 @@ const getBucketImages = async () => {
 
 export async function GET(request: Request) {
   try {
-    const sessionResult = await requireSession(request);
-    if (!sessionResult.ok) {
-      return sessionResult.response;
+    const accessResult = await requireShopImageAccess(request, {
+      requireSessionFn: requireSession,
+    });
+    if (!accessResult.ok) {
+      return accessResult.response;
     }
 
     const scopeResult = await resolveStoreImageScope(
-      { loginEmail: sessionResult.user.email },
+      { loginEmail: accessResult.loginEmail },
       {
         listStoreLinks: listStoreImageLinks,
       },
@@ -53,9 +56,11 @@ export async function GET(request: Request) {
 
 export async function PUT(request: Request) {
   try {
-    const sessionResult = await requireSession(request);
-    if (!sessionResult.ok) {
-      return sessionResult.response;
+    const accessResult = await requireShopImageAccess(request, {
+      requireSessionFn: requireSession,
+    });
+    if (!accessResult.ok) {
+      return accessResult.response;
     }
 
     let payload: unknown;
@@ -72,7 +77,7 @@ export async function PUT(request: Request) {
 
     const scopeResult = await resolveStoreImageScope(
       {
-        loginEmail: sessionResult.user.email,
+        loginEmail: accessResult.loginEmail,
         requestedStoreId: parsed.data.storeId,
       },
       { listStoreLinks: listStoreImageLinks },

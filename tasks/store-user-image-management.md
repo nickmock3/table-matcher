@@ -63,6 +63,18 @@
 - DoD:
   - 仕様書の受け入れ条件 1-6 を主要導線として確認できる
   - `bun run lint` / `bun run test` / `bun run e2e` / `bun run build` が通過
+- ステータス:
+  - 完了（2026-02-25）
+- 実行コマンド:
+  - `bun run test -- src/features/store-user-image-management/shop-image-auth.test.ts src/features/store-user-image-management/shop-image-management-view.test.ts src/features/store-user-image-management/image-management-input.test.ts src/features/store-user-image-management/image-storage.test.ts src/features/store-user-image-management/store-image-access.test.ts`
+  - `bun run lint -- e2e/store-user-image-management.spec.ts src/app/api/shop/images/route.ts src/app/api/shop/images/upload/route.ts src/features/store-user-image-management/shop-image-auth.ts src/features/store-user-image-management/shop-image-auth.test.ts`
+  - `bun run e2e -- e2e/store-user-image-management.spec.ts`
+  - `bun run build`
+- 結果要約:
+  - unit: pass（34 tests）
+  - lint: pass
+  - e2e: pass（3 tests）
+  - build: pass
 
 ## 補足
 - 本タスクでR2アップロードを扱う（MVPはAPI経由アップロード）。

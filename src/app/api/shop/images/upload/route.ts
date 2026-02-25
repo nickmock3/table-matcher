@@ -6,6 +6,7 @@ import {
   validateStoreImageBinary,
   validateStoreImageUploadFile,
 } from '@/features/store-user-image-management/image-storage';
+import { requireShopImageAccess } from '@/features/store-user-image-management/shop-image-auth';
 import {
   listStoreImageLinks,
   resolveStoreImageScope,
@@ -19,9 +20,11 @@ const getBucketImages = async () => {
 
 export async function POST(request: Request) {
   try {
-    const sessionResult = await requireSession(request);
-    if (!sessionResult.ok) {
-      return sessionResult.response;
+    const accessResult = await requireShopImageAccess(request, {
+      requireSessionFn: requireSession,
+    });
+    if (!accessResult.ok) {
+      return accessResult.response;
     }
 
     const formData = await request.formData();
@@ -30,7 +33,7 @@ export async function POST(request: Request) {
 
     const scopeResult = await resolveStoreImageScope(
       {
-        loginEmail: sessionResult.user.email,
+        loginEmail: accessResult.loginEmail,
         requestedStoreId: typeof requestedStoreId === 'string' && requestedStoreId.length > 0 ? requestedStoreId : undefined,
       },
       { listStoreLinks: listStoreImageLinks },
