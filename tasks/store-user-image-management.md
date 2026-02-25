@@ -40,6 +40,16 @@
   - e2e: 任意（主要導線は次タスク）
 - DoD:
   - 仕様書の機能要件 3,4,5 を満たす
+- ステータス:
+  - 完了（2026-02-25）
+- 実行コマンド:
+  - `bun run test -- src/features/store-user-image-management/shop-image-management-view.test.ts src/features/store-user-image-management/image-management-input.test.ts src/features/store-user-image-management/image-storage.test.ts src/features/store-user-image-management/store-image-access.test.ts`
+  - `bun run lint -- src/app/shop/images/page.tsx src/features/store-user-image-management/components/ShopImageManagementPageContent.tsx src/features/store-user-image-management/shop-image-management-view.ts src/features/store-user-image-management/shop-image-management-view.test.ts`
+  - `bun run build`
+- 結果要約:
+  - unit: pass（31 tests）
+  - lint: pass
+  - build: pass
 
 ### TASK-SUIM-003: 公開反映E2Eと仕上げ
 - 内容:
