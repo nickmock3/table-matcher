@@ -80,6 +80,43 @@ wrangler d1 execute table-matcher-dev \
              ON CONFLICT(email) DO UPDATE SET role='admin', updated_at=strftime('%s','now');"
 ```
 
+## ローカル店舗ユーザー紐づけ（`/shop/images`確認用）
+`/shop/images` は店舗ユーザー（`role=shop`）かつ `store_user_links` 紐づけが必要です。  
+`<SHOP_EMAIL>` と `<STORE_ID>` を置き換えて、以下を上から順に実行してください（`BEGIN/COMMIT` は使わない）。
+
+```bash
+wrangler d1 execute table-matcher-dev --local --env dev --config wrangler.jsonc --command \
+"INSERT INTO users (id, email, role, created_at, updated_at)
+ VALUES (lower(hex(randomblob(16))), '<SHOP_EMAIL>', 'shop', strftime('%s','now'), strftime('%s','now'))
+ ON CONFLICT(email) DO UPDATE SET role='shop', updated_at=strftime('%s','now');"
+```
+
+```bash
+wrangler d1 execute table-matcher-dev --local --env dev --config wrangler.jsonc --command \
+"INSERT INTO store_user_links (id, store_id, user_id, login_email, created_at, updated_at)
+ SELECT lower(hex(randomblob(16))), '<STORE_ID>', u.id, '<SHOP_EMAIL>', strftime('%s','now'), strftime('%s','now')
+ FROM users u
+ WHERE u.email = '<SHOP_EMAIL>'
+   AND NOT EXISTS (
+     SELECT 1 FROM store_user_links l
+     WHERE l.store_id = '<STORE_ID>' AND l.login_email = '<SHOP_EMAIL>'
+   );"
+```
+
+紐づけ確認:
+
+```bash
+wrangler d1 execute table-matcher-dev --local --env dev --config wrangler.jsonc --command \
+"SELECT login_email, store_id FROM store_user_links WHERE login_email = '<SHOP_EMAIL>';"
+```
+
+`<STORE_ID>` の確認:
+
+```bash
+wrangler d1 execute table-matcher-dev --local --env dev --config wrangler.jsonc --command \
+"SELECT id, name FROM stores LIMIT 20;"
+```
+
 ## 参照ドキュメント
 - `docs/setup.md`（環境構築手順）
 - `docs/development-policy.md`（開発方針・DoD・レビュー基準）
