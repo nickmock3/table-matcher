@@ -28,6 +28,7 @@ test('店舗ユーザーが画像をアップロードして保存し、公開�
   const initialPayload = (await initialResponse.json()) as {
     ok: boolean;
     storeId: string;
+    storeName: string | null;
     imageUrls: string[];
   };
   const initialImageUrls = initialPayload.imageUrls;
@@ -68,8 +69,10 @@ test('店舗ユーザーが画像をアップロードして保存し、公開�
       page.getByText(/保存しました。公開画面に反映されます。|保存は完了しました。削除画像の後処理が保留中です。/),
     ).toBeVisible();
 
-    await page.goto('/stores/3');
-    await expect(page.getByRole('heading', { name: '和食処 さくら' })).toBeVisible();
+    await page.goto(`/stores/${initialPayload.storeId}`);
+    if (initialPayload.storeName) {
+      await expect(page.getByRole('heading', { name: initialPayload.storeName })).toBeVisible();
+    }
     await expect(page.getByRole('button', { name: `画像 ${expectedCount} を表示` })).toBeVisible();
   } finally {
     const restoreResponse = await page.request.put('/api/shop/images', {
