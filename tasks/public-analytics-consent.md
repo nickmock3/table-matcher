@@ -95,7 +95,17 @@
   - `bun run lint` / 関連unit / 必要e2e / `bun run build` が通過
   - 実行コマンドと結果要約が記録されている
 - ステータス:
-  - 未着手
+  - 完了（2026-02-27）
+- 実行コマンド:
+  - `bun run lint -- --ignore-pattern '.wrangler/**' --ignore-pattern 'test-results/**'`
+  - `bun run test -- src/features/public-analytics-consent/consent-model.test.ts src/features/public-analytics-consent/page-view-input.test.ts src/features/public-analytics-consent/page-view-tracking.test.ts`
+  - `bun run e2e -- e2e/public-analytics-consent.spec.ts e2e/public-analytics-page-view-tracking.spec.ts`
+  - `bun run build`
+- 結果要約:
+  - lint: pass
+  - unit: pass（20 tests）
+  - e2e: pass（3 tests）
+  - build: pass
 
 ## 補足
 - 分配計算ロジック（日次集計、配分率、管理者取り分）は別タスクで実施する。
