@@ -163,6 +163,10 @@
   - 対象機能の `spec + plan + tasks` が揃っている
   - 主要導線のE2E（必要な範囲）が通っている
   - デモ対象外の機能/未実装事項を明記している
+  - demo DB の migration が最新まで適用済みである（特にAPI追加・DB変更を含む場合）
+- 事前確認/実行（推奨）:
+  - 適用状況確認: `bunx wrangler@latest d1 migrations list table-matcher-demo --remote --env demo --config wrangler.jsonc`
+  - 未適用がある場合: `bunx wrangler@latest d1 migrations apply table-matcher-demo --remote --env demo --config wrangler.jsonc`
 - 提出物:
   - demo URL
   - 今回の確認ポイント
@@ -198,3 +202,4 @@
 - 2026-02-10: リリース手順を確定（`dev / demo / prod` の3段階運用とロールバック）
 - 2026-02-10: `demo` 環境実装を反映（`env.demo` と `deploy:demo` を追加）
 - 2026-02-10: ドキュメント表記を確定版に統一（策定中/草案表現を解消）
+- 2026-02-27: demo反映手順に「remote D1 migration確認・適用」を追記
