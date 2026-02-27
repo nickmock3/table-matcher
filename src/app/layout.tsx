@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { PublicAnalyticsConsentBanner } from "@/features/public-analytics-consent/components/PublicAnalyticsConsentBanner";
+import { PublicPageViewTracker } from "@/features/public-analytics-consent/components/PublicPageViewTracker";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -29,6 +30,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         {children}
+        <PublicPageViewTracker />
         <PublicAnalyticsConsentBanner />
       </body>
     </html>
