@@ -36,7 +36,8 @@
 ### TASK-PAC-002: 閲覧イベント収集API（最小）
 - 内容:
   - `page_view_events` 保存APIを実装
-  - payload検証（`storeId`, `path`, `occurredAt`, `anonId`, `sessionId`）
+  - payload検証（`storeId`, `path`, `occurredAt`, `sessionId`）
+  - `anonId` は同意APIで管理するCookieから解決して保存
   - 重複判定用キー生成ロジックを追加
 - ブランチ例: `feature/public-analytics-page-view-api`
 - テスト:
@@ -45,7 +46,18 @@
 - DoD:
   - 受け入れ条件 2,3,5 を満たすためのAPIが成立
 - ステータス:
-  - 未着手
+  - 完了（2026-02-27）
+- 実行コマンド:
+  - `bun run db:generate`
+  - `bun run db:migrate:local`
+  - `bun run lint -- src/lib/db/schema.ts src/app/api/public/analytics/page-view/route.ts src/features/public-analytics-consent/page-view-input.ts src/features/public-analytics-consent/page-view-input.test.ts`
+  - `bun run test -- src/features/public-analytics-consent/page-view-input.test.ts`
+  - `bun run build`
+- 結果要約:
+  - migration: pass（`page_view_events` 追加、重複防止ユニークインデックス追加）
+  - lint: pass
+  - unit: pass（7 tests）
+  - build: pass
 
 ### TASK-PAC-003: 同意連動の送信制御（公開画面）
 - 内容:

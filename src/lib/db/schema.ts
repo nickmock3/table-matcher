@@ -1,4 +1,4 @@
-import { integer, real, sqliteTable, text } from "drizzle-orm/sqlite-core";
+import { integer, real, sqliteTable, text, uniqueIndex } from "drizzle-orm/sqlite-core";
 
 const nowEpoch = () => Math.floor(Date.now() / 1000);
 const nowDate = () => new Date();
@@ -107,6 +107,23 @@ export const analyticsConsents = sqliteTable("analytics_consents", {
   updatedAt: integer("updated_at", { mode: "number" }).notNull().$defaultFn(nowEpoch),
 });
 
+export const pageViewEvents = sqliteTable(
+  "page_view_events",
+  {
+    id: text("id").primaryKey(),
+    storeId: text("store_id").references(() => stores.id, { onDelete: "set null" }),
+    path: text("path").notNull(),
+    anonId: text("anon_id").notNull(),
+    sessionId: text("session_id").notNull(),
+    occurredAt: integer("occurred_at", { mode: "number" }).notNull(),
+    dedupeKey: text("dedupe_key").notNull(),
+    createdAt: integer("created_at", { mode: "number" }).notNull().$defaultFn(nowEpoch),
+  },
+  (table) => ({
+    dedupeKeyUnique: uniqueIndex("page_view_events_dedupe_key_unique").on(table.dedupeKey),
+  }),
+);
+
 export const schema = {
   user,
   session,
@@ -117,4 +134,5 @@ export const schema = {
   storeUserLinks,
   seatStatusUpdates,
   analyticsConsents,
+  pageViewEvents,
 };
