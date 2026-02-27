@@ -100,6 +100,13 @@ export const seatStatusUpdates = sqliteTable("seat_status_updates", {
   createdAt: integer("created_at", { mode: "number" }).notNull().$defaultFn(nowEpoch),
 });
 
+export const analyticsConsents = sqliteTable("analytics_consents", {
+  anonId: text("anon_id").primaryKey(),
+  status: text("status", { enum: ["accepted", "rejected"] }).notNull(),
+  createdAt: integer("created_at", { mode: "number" }).notNull().$defaultFn(nowEpoch),
+  updatedAt: integer("updated_at", { mode: "number" }).notNull().$defaultFn(nowEpoch),
+});
+
 export const schema = {
   user,
   session,
@@ -109,4 +116,5 @@ export const schema = {
   stores,
   storeUserLinks,
   seatStatusUpdates,
+  analyticsConsents,
 };
