@@ -71,7 +71,17 @@
 - DoD:
   - 受け入れ条件 2,3,4 を満たす
 - ステータス:
-  - 未着手
+  - 完了（2026-02-27）
+- 実行コマンド:
+  - `bun run lint -- src/app/layout.tsx src/features/public-analytics-consent/components/PublicPageViewTracker.tsx src/features/public-analytics-consent/page-view-tracking.ts src/features/public-analytics-consent/page-view-tracking.test.ts e2e/public-analytics-page-view-tracking.spec.ts`
+  - `bun run test -- src/features/public-analytics-consent/page-view-tracking.test.ts`
+  - `bun run e2e -- e2e/public-analytics-page-view-tracking.spec.ts`
+  - `bun run build`
+- 結果要約:
+  - lint: pass
+  - unit: pass（4 tests）
+  - e2e: pass（2 tests）
+  - build: pass
 
 ### TASK-PAC-004: 検証実行と結果記録
 - 内容:
